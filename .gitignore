@@ -1,0 +1,13 @@
+#application.properties
+*.properties
+
+#.class files
+*.class
+
+#generated files
+bin/
+gen/
+
+#Built application files
+*.apk
+*.ap_
