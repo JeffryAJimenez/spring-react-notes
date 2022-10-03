@@ -77,8 +77,8 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(new JwtTokenAuthenticationFilter(serviceUsername, jwtConfig, tokenProvider, userService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
-                .antMatchers(HttpMethod.POST, "users").anonymous()
+                .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/users").anonymous()
                 .antMatchers("/console/**").permitAll()
                 .anyRequest().authenticated();
 

@@ -28,12 +28,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/auth")
 @Slf4j
 public class UserController {
 
     private UserService userService;
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider tokenProvider;
+
 
     public UserController(UserService userService, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
 
@@ -101,7 +103,7 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping(value="users/summary/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/users/summary/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUserSummary(@PathVariable("username") String username){
         log.info("retrieving user {}", username);
 
@@ -110,7 +112,7 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException(username));
     }
 
-    @GetMapping(value = "users/summary",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/users/summary",  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllUsersSummary(){
         log.info("retrieving all users summaries");
 
@@ -120,7 +122,7 @@ public class UserController {
     }
 
     //TODO write test
-    @PostMapping(value="users/summary/in", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/users/summary/in", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getUsersSummaries(@RequestBody List<String> username){
         log.info("retrieving summaries for {} users", username.size());
 

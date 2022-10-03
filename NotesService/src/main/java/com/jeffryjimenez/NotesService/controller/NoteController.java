@@ -4,7 +4,6 @@ import com.jeffryjimenez.NotesService.domain.Note;
 import com.jeffryjimenez.NotesService.payload.NoteRequest;
 import com.jeffryjimenez.NotesService.service.NoteService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -15,6 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/notes")
 public class NoteController {
 
     private NoteService noteService;
