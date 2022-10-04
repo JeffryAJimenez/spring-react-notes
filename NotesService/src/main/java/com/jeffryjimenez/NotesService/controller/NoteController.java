@@ -23,25 +23,24 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @PostMapping("/notes")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createNote(@RequestBody NoteRequest noteRequest, @AuthenticationPrincipal Principal principal){
+    @PostMapping("/")
+    public ResponseEntity<?> createNote(@RequestBody NoteRequest noteRequest, Principal principal){
         log.info("recieved a request to create a note for {}", principal.getName());
 
         Note note = noteService.createNode(noteRequest, principal.getName());
 
-        return ResponseEntity.ok(note);
+        return new ResponseEntity<Note>(note, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/notes/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteNote(@PathVariable("id") Long id, @AuthenticationPrincipal Principal principal){
+    public void deleteNote(@PathVariable("id") Long id, Principal principal){
         noteService.deleteNote(id, principal.getName());
     }
 
-    @GetMapping("/notes/me")
+    @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> findCurrentUserNotes(@AuthenticationPrincipal Principal principal){
+    public ResponseEntity<?> findCurrentUserNotes(Principal principal){
         log.info("retrieving notes for user {}", principal.getName());
 
         List<Note> notes = noteService.notesByUsernames(principal.getName());
@@ -50,7 +49,7 @@ public class NoteController {
         return ResponseEntity.ok(notes);
     }
 
-    @GetMapping("/notes/{username}")
+    @GetMapping("/{username}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> findUserNotes(@PathVariable("username") String username){
         log.info("retrieving notes for user {}", username);
