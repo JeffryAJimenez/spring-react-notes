@@ -11,3 +11,5 @@ gen/
 #Built application files
 *.apk
 *.ap_
+
+/node_modules

@@ -13,9 +13,9 @@ public class DataConfig {
     public CommandLineRunner commandLineRunner(NoteRepository noteRepository){
 
         return args -> {
-            Note note1 = new Note(1L, "Note from john! hello world", "johndoe");
-            Note note2 = new Note(2L, "Note from Marta, What should i eat tomorrow", "johndoe");
-            Note note3 = new Note(3L, "Note from Jotaro! ZA WARDU!", "johndoe");
+            Note note1 = new Note("Note from john! hello world", "johndoe");
+            Note note2 = new Note( "Note from Marta, What should i eat tomorrow", "johndoe");
+            Note note3 = new Note("Note from Jotaro! ZA WARDU!", "johndoe");
 
             noteRepository.save(note1);
             noteRepository.save(note2);

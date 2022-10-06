@@ -27,9 +27,19 @@ public class Note {
     @NotBlank
     private String username;
 
+    private boolean completed;
+
     public Note(String message, String username){
         this.message = message;
         this.username = username;
+        this.completed = false;
+    }
+
+    public Note(Long id, String message, String username){
+        this.id = id;
+        this.message = message;
+        this.username = username;
+        this.completed = false;
     }
 
     @Override

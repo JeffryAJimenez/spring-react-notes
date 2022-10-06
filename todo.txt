@@ -1,0 +1,2 @@
+getCurrentUser
+edit notes in api
