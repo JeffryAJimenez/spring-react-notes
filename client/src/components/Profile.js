@@ -3,11 +3,17 @@ import {Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 const Profile = () => {
-    const {user: currentUser} = useSelector((state) => state.auth);
+    // const {user: currentUser} = useSelector((state) => state.auth);
 
-    if(!currentUser){
-        return <Navigate to="/login" />;
+    const currentUser  = {
+        username: 'johndoe',
+        accessToken: 'jwabdbawbkefbjhammnsaa',
+        id: 3,
+        email: 'johndoe@eamil.ccom'
     }
+    // if(!currentUser){
+    //     return <Navigate to="/login" />;
+    // }
 
     return (
         <div className="container">

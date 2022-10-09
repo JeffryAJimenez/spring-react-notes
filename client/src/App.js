@@ -10,11 +10,12 @@ import Meals from "./components/Meals/Meals";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
-import Profile from "./components/Profile";
+// import Profile from "./components/Profile";
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
 import Cart from "./components/Cart/Cart";
+import Profile from "./components/Profile/Profile";
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
 
   return (
     <Fragment>
+      <Profile />
       {cartIsShow && <Cart onClose={hideCartHandler}/>}
       <Header onShowCart={showCartHandler} />
       <main>
@@ -71,7 +73,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
+          {/* <Route path="/profile" element={<Profile />} /> */}
         </Routes>
       </div>
     </Fragment>

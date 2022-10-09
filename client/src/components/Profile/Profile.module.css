@@ -1,0 +1,100 @@
+
+
+.card{
+  width: 400px;
+  border: none;
+  border-radius: 10px;
+   
+  background-color: #fff;
+}
+
+
+.articles{
+  font-size:10px;
+  color: #a1aab9;
+}
+.number1{
+  font-weight:500;
+}
+.followers{
+    font-size:10px;
+  color: #a1aab9;
+
+}
+.number2{
+  font-weight:500;
+}
+.rating{
+    font-size:10px;
+  color: #a1aab9;
+}
+.number3{
+  font-weight:500;
+}
+ 
+
+/* 
+
+*/
+
+.image {
+
+    margin: 10px;
+}
+
+.body {
+    display: flex;
+    align-items: center;
+}
+
+.stats {
+    
+    font: inherit;
+    border: none;
+    background-color: #8a2b06;
+    color: white;
+    padding: .80rem;
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    border-radius: 25px;
+    margin-right: 7px;
+    
+}
+
+.stats-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.stats-item-title {
+    font-weight: bold;
+}
+
+.name {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.body-left {
+    width: 100%;
+}
+
+.buttons {
+
+    margin-top: 2px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.buttons-next{
+
+    margin-top: 2px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: center;
+}
