@@ -12,7 +12,7 @@ const Header = (props) => {
 
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
 
-    const authentication_button = isLoggedIn ? <HeaderProfileButton /> : <HeaderLoginButton />
+    const authentication_button = isLoggedIn ? <HeaderProfileButton onClick={props.onShowProfile} /> : <HeaderLoginButton onClick={props.onShowProfile}/>
     return <Fragment>
         <header className={classes.header}>
             <h1>ReactMeals</h1>

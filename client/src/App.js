@@ -22,6 +22,7 @@ function App() {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
   const [showAdminBoard, setShowAdminBoard] = useState(false);
   const [cartIsShow, setCartIsShow] = useState(false);
+  const [profileIsShow, setProfileIsShow] = useState(false);
 
   const {user: currentUser} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -46,6 +47,15 @@ function App() {
     setCartIsShow(false);
   }
 
+  const showProfileHandler = () => {
+    console.log("handler called");
+    setProfileIsShow(true);
+  }
+
+  const hideProfileHandler = () => {
+    setProfileIsShow(false);
+  }
+
   useEffect(() => {
 
     if(currentUser){
@@ -60,9 +70,9 @@ function App() {
 
   return (
     <Fragment>
-      <Profile />
+      {profileIsShow && <Profile onClose={hideProfileHandler}/>}
       {cartIsShow && <Cart onClose={hideCartHandler}/>}
-      <Header onShowCart={showCartHandler} />
+      <Header onShowCart={showCartHandler} onShowProfile={showProfileHandler}/>
       <main>
         <Meals />
       </main>

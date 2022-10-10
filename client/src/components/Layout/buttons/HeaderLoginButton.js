@@ -5,8 +5,6 @@ import LoginIcon from "./LoginIcon";
 
 const HeaderLoginButton = (props) => {
 
-   
-
     return <button className={classes.button} onClick={props.onClick}>
         <span className={classes.icon}>
          <LoginIcon />
