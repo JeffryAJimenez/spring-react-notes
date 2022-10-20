@@ -8,7 +8,6 @@ import "./App.css";
 import Header from "./components/Layout/Header";
 import Meals from "./components/Meals/Meals";
 
-import Register from "./components/Register";
 import Home from "./components/Home";
 // import Profile from "./components/Profile";
 
@@ -17,6 +16,7 @@ import { clearMessage } from "./actions/message";
 import Cart from "./components/Cart/Cart";
 import Profile from "./components/Profile/Profile";
 import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
 
 function App() {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -24,6 +24,7 @@ function App() {
   const [cartIsShow, setCartIsShow] = useState(false);
   const [profileIsShow, setProfileIsShow] = useState(false);
   const [loginIsShow, setLoginIsShow] = useState(false);
+  const [registerIsShow, setRegisterIsShow] = useState(false);
 
   const { user: currentUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -65,6 +66,20 @@ function App() {
     setLoginIsShow(false);
   };
 
+  const hideRegisterHandler = () => {
+    setRegisterIsShow(false);
+  };
+
+  const reDirectToRegisterHandler = () => {
+    setLoginIsShow(false);
+    setRegisterIsShow(true);
+  };
+
+  const reDirectToLoginHandler = () => {
+    setRegisterIsShow(false);
+    setLoginIsShow(true);
+  };
+
   useEffect(() => {
     if (currentUser) {
       setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
@@ -79,7 +94,19 @@ function App() {
     <Fragment>
       {profileIsShow && <Profile onClose={hideProfileHandler} />}
       {cartIsShow && <Cart onClose={hideCartHandler} />}
-      {loginIsShow && <Login onClose={hideLoginHandler} />}
+      {loginIsShow && (
+        <Login
+          onClose={hideLoginHandler}
+          onRegister={reDirectToRegisterHandler}
+        />
+      )}
+
+      {registerIsShow && (
+        <Register
+          onClose={hideRegisterHandler}
+          onLogin={reDirectToLoginHandler}
+        />
+      )}
       <Header
         onShowCart={showCartHandler}
         onShowProfile={showProfileHandler}
