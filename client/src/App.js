@@ -82,11 +82,11 @@ function App() {
 
   useEffect(() => {
     if (currentUser) {
-      setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
-      setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
+      // setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
+      // setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
     } else {
-      setShowModeratorBoard(false);
-      setShowAdminBoard(false);
+      // setShowModeratorBoard(false);
+      // setShowAdminBoard(false);
     }
   }, [currentUser]);
 

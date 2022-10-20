@@ -5,10 +5,26 @@ import classes from "./Login.module.css";
 import Modal from "../UI/Modal";
 import FormSubmitButton from "../UI/FormSubmitButton";
 import ButtonInverted from "../UI/ButtonInverted";
+import { useDispatch } from "react-redux";
+
+import { LOGIN_SUCCESS } from "../../actions/types";
 const Login = (props) => {
+  const dispatch = useDispatch();
+
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("submit called");
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: {
+        user: {
+          username: "johndoe",
+          name: "john doe",
+          email: "johndoe@gmail.com",
+        },
+      },
+    });
+
+    props.onClose();
   };
 
   return (
@@ -24,35 +40,35 @@ const Login = (props) => {
         </div>
 
         <form onSubmit={submitHandler}>
-          <div class="form-group">
-            <label for="username">Username</label>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               id="username"
               aria-describedby="emailHelp"
               placeholder="Enter username"
             />
-            <small id="emailHelp" class="form-text text-muted">
+            <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
             </small>
           </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
+          <div className="form-group">
+            <label htmlFor="exampleInputPassword1">Password</label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               id="exampleInputPassword1"
               placeholder="Password"
             />
           </div>
-          <div class="form-check mb-3">
+          <div className="form-check mb-3">
             <input
               type="checkbox"
-              class="form-check-input"
+              className="form-check-input"
               id="exampleCheck1"
             />
-            <label class="form-check-label" for="exampleCheck1">
+            <label className="form-check-label" htmlFor="exampleCheck1">
               Check me out
             </label>
           </div>

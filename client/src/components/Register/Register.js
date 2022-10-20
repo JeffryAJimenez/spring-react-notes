@@ -29,7 +29,7 @@ const Register = (props) => {
               <label for="firstname">First Name</label>
               <input
                 type="text"
-                class="form-control"
+                className="form-control"
                 id="fistname"
                 aria-describedby="emailHelp"
                 placeholder="First Name"
@@ -40,7 +40,7 @@ const Register = (props) => {
               <label for="lastname">Last Name</label>
               <input
                 type="text"
-                class="form-control"
+                className="form-control"
                 id="lastname"
                 aria-describedby="emailHelp"
                 placeholder="Last Name"
@@ -51,7 +51,7 @@ const Register = (props) => {
             <label for="username">Username</label>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               id="username"
               aria-describedby="emailHelp"
               placeholder="Enter username"
@@ -62,12 +62,12 @@ const Register = (props) => {
             <label for="email">Email</label>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               id="email"
               aria-describedby="emailHelp"
               placeholder="Enter email"
             />
-            <small id="emailHelp" class="form-text text-muted">
+            <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
             </small>
           </div>
@@ -76,7 +76,7 @@ const Register = (props) => {
             <label for="exampleInputPassword1">Password</label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               id="exampleInputPassword1"
               placeholder="Password"
             />
@@ -84,7 +84,7 @@ const Register = (props) => {
           <div className="form-check mb-3">
             <input
               type="checkbox"
-              class="form-check-input"
+              className="form-check-input"
               id="exampleCheck1"
             />
             <label className="form-check-label" for="exampleCheck1">
