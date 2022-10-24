@@ -52,6 +52,12 @@
 
 .fullname {
   display: flex;
-  flex-flow: row wrap;
   justify-content: space-evenly;
+  width: 100%;
+}
+
+.flex-item {
+  margin: 2px;
+  flex-grow: 1;
+  width: 100%;
 }

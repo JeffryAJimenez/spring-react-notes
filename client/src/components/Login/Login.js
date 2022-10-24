@@ -1,31 +1,59 @@
-import { Fragment } from "react";
-import CloseButton from "../UI/CloseButton";
-
 import classes from "./Login.module.css";
 import Modal from "../UI/Modal";
 import FormSubmitButton from "../UI/FormSubmitButton";
 import ButtonInverted from "../UI/ButtonInverted";
-import { useDispatch } from "react-redux";
+import CloseButton from "../UI/CloseButton";
 
-import { LOGIN_SUCCESS } from "../../actions/types";
+import useInput from "../../hooks/useInput";
+
 const Login = (props) => {
-  const dispatch = useDispatch();
+  const {
+    value: username,
+    isValid: usernameIsValid,
+    hasError: usernameHasError,
+    valueChangeHandler: usernameChangeHandler,
+    inputBlurHandler: usernameBlurHandler,
+  } = useInput((value) => value.trim() !== "");
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: {
-        user: {
-          username: "johndoe",
-          name: "john doe",
-          email: "johndoe@gmail.com",
-        },
-      },
-    });
+  const {
+    value: password,
+    isValid: passwordIsValid,
+    hasError: passwordHasError,
+    valueChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+  } = useInput((value) => value.trim() !== "");
 
-    props.onClose();
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+
+    if (!usernameIsValid || !passwordIsValid) {
+      usernameBlurHandler();
+      passwordBlurHandler();
+      return;
+    }
+
+    console.log("submitted");
   };
+
+  const usernameInputClasses = usernameHasError
+    ? "form-control is-invalid"
+    : "form-control";
+
+  const usernameInputWarning = usernameHasError ? (
+    <div className="invalid-feedback">Please provide a username.</div>
+  ) : (
+    <small id="emailHelp" className="form-text text-muted">
+      We'll never share your information with anyone else.
+    </small>
+  );
+
+  const passwordInputClasses = passwordHasError
+    ? "form-control is-invalid"
+    : "form-control";
+
+  const passwordInputWarning = passwordHasError ? (
+    <div className="invalid-feedback">Please provide a password.</div>
+  ) : null;
 
   return (
     <Modal onClose={props.onClose}>
@@ -39,28 +67,33 @@ const Login = (props) => {
           available any time!
         </div>
 
-        <form onSubmit={submitHandler}>
+        <form onSubmit={onSubmitHandler}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
               type="text"
-              className="form-control"
+              className={usernameInputClasses}
               id="username"
+              name="username"
               aria-describedby="emailHelp"
               placeholder="Enter username"
+              onChange={usernameChangeHandler}
+              onBlur={usernameBlurHandler}
             />
-            <small id="emailHelp" className="form-text text-muted">
-              We'll never share your email with anyone else.
-            </small>
+            {usernameInputWarning}
           </div>
           <div className="form-group">
             <label htmlFor="exampleInputPassword1">Password</label>
             <input
               type="password"
-              className="form-control"
+              className={passwordInputClasses}
               id="exampleInputPassword1"
+              name="password"
               placeholder="Password"
+              onChange={passwordChangeHandler}
+              onBlur={passwordBlurHandler}
             />
+            {passwordInputWarning}
           </div>
           <div className="form-check mb-3">
             <input
