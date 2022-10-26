@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import CloseButton from "../UI/CloseButton";
 
 import classes from "./Register.module.css";
@@ -7,7 +7,14 @@ import FormSubmitButton from "../UI/FormSubmitButton";
 import ButtonInverted from "../UI/ButtonInverted";
 
 import useInput from "../../hooks/useInput";
+import authService from "../../services/auth.service";
+import Spinner from "../UI/Spinner";
+
 const Register = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailIsTaken, setEmailIsTaken] = useState(false);
+  const [usernameIsTaken, setUsernameIsTaken] = useState(false);
+
   let mediumPasswordRegex = new RegExp(
     "((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))"
   );
@@ -61,6 +68,16 @@ const Register = (props) => {
     inputBlurHandler: confirmPasswordBlurHandler,
   } = useInput((value) => value === password);
 
+  const onChangeEmailHandler = (e) => {
+    setEmailIsTaken(false);
+    emailChangeHandler(e);
+  };
+
+  const onChangeUsernameHandler = (e) => {
+    setUsernameIsTaken(false);
+    usernameChangeHandler(e);
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -81,7 +98,36 @@ const Register = (props) => {
       return;
     }
 
-    console.log("submit called");
+    setIsLoading(true);
+
+    authService
+      .firebaseRegister(email, password)
+      .then((res) => {
+        if (res.status === 200) {
+        }
+      })
+      .catch((error) => {
+        let errorMessage = "Authentication failed!";
+
+        if (
+          error &&
+          error.response &&
+          error.response.data &&
+          error.response.data.error &&
+          error.response.data.error.message
+        ) {
+          errorMessage = error.response.data.error.message;
+
+          if (error.response.data.error.message === "EMAIL_EXISTS") {
+            setEmailIsTaken(true);
+          }
+
+          if (error.response.data.error.message === "USERNAME_EXISTS") {
+            setUsernameIsTaken(true);
+          }
+        }
+      })
+      .finally(setIsLoading(false));
   };
 
   const firstnameInputClasses = firstnameHasError
@@ -92,9 +138,8 @@ const Register = (props) => {
     ? "form-control is-invalid"
     : "form-control";
 
-  const emailInputClasses = emailHasError
-    ? "form-control is-invalid"
-    : "form-control";
+  const emailInputClasses =
+    emailHasError || emailIsTaken ? "form-control is-invalid" : "form-control";
 
   const emailInputWarning = emailHasError ? (
     <div className="invalid-feedback">Please provide a valid email.</div>
@@ -104,6 +149,11 @@ const Register = (props) => {
     </small>
   );
 
+  const usernameInputWarning = usernameHasError ? (
+    <div className="invalid-feedback">
+      A username should contain at least 4 characters.
+    </div>
+  ) : null;
   const usernameInputClasses = usernameHasError
     ? "form-control is-invalid"
     : "form-control";
@@ -131,7 +181,7 @@ const Register = (props) => {
         <form onSubmit={submitHandler}>
           <div className={classes.fullname}>
             <div className={`form-group ${classes["flex-item"]}`}>
-              <label for="firstname">First Name</label>
+              <label htmlFor="firstname">First Name</label>
               <input
                 type="text"
                 className={firstnameInputClasses}
@@ -149,7 +199,7 @@ const Register = (props) => {
             </div>
 
             <div className={`form-group ${classes["flex-item"]}`}>
-              <label for="lastname">Last Name</label>
+              <label htmlFor="lastname">Last Name</label>
               <input
                 type="text"
                 className={lastnameInputClasses}
@@ -167,39 +217,47 @@ const Register = (props) => {
             </div>
           </div>
           <div className="form-group">
-            <label for="username">Username</label>
+            <label htmlFor="username">Username</label>
             <input
               type="text"
               className={usernameInputClasses}
               id="username"
               aria-describedby="emailHelp"
               placeholder="Enter username"
-              onChange={usernameChangeHandler}
+              onChange={onChangeUsernameHandler}
               onBlur={usernameBlurHandler}
             />
-            {usernameHasError && (
-              <div className="invalid-feedback">
-                A username should contain at least 4 characters.
+            {usernameIsTaken ? (
+              <div className={classes.warning}>
+                Email address already in use.
               </div>
+            ) : (
+              usernameInputWarning
             )}
           </div>
 
           <div className="form-group">
-            <label for="email">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="text"
               className={emailInputClasses}
               id="email"
               aria-describedby="emailHelp"
               placeholder="Enter email"
-              onChange={emailChangeHandler}
+              onChange={onChangeEmailHandler}
               onBlur={emailBlurHandler}
             />
-            {emailInputWarning}
+            {emailIsTaken ? (
+              <div className={classes.warning}>
+                Email address already in use.
+              </div>
+            ) : (
+              emailInputWarning
+            )}
           </div>
 
           <div className="form-group">
-            <label for="exampleInputPassword1">Password</label>
+            <label htmlFor="exampleInputPassword1">Password</label>
             <input
               type="password"
               className={passwordInputClasses}
@@ -218,7 +276,7 @@ const Register = (props) => {
           </div>
 
           <div className="form-group mb-3">
-            <label for="confirmPassword">Confirm Password</label>
+            <label htmlFor="confirmPassword">Confirm Password</label>
             <input
               type="password"
               className={confirmPasswordInputClasses}
@@ -234,7 +292,8 @@ const Register = (props) => {
             )}
           </div>
 
-          <FormSubmitButton name="Join Now" />
+          {!isLoading && <FormSubmitButton name="Join Now" />}
+          {isLoading && <Spinner />}
         </form>
       </div>
       <div className={classes.divider}></div>

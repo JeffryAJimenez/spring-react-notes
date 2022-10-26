@@ -1,12 +1,22 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+
 import classes from "./Login.module.css";
 import Modal from "../UI/Modal";
 import FormSubmitButton from "../UI/FormSubmitButton";
 import ButtonInverted from "../UI/ButtonInverted";
 import CloseButton from "../UI/CloseButton";
 
+import { loginFirebase } from "../../actions/auth";
 import useInput from "../../hooks/useInput";
+import authService from "../../services/auth.service";
+import Spinner from "../UI/Spinner";
 
 const Login = (props) => {
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
   const {
     value: username,
     isValid: usernameIsValid,
@@ -32,7 +42,15 @@ const Login = (props) => {
       return;
     }
 
-    console.log("submitted");
+    dispatch(loginFirebase(username, password))
+      .then(() => {
+        console.log("Success");
+        props.onClose();
+      })
+      .catch(() => {
+        setIsError(true);
+      })
+      .finally(setIsLoading(false));
   };
 
   const usernameInputClasses = usernameHasError
@@ -66,7 +84,13 @@ const Login = (props) => {
           Sign in or create an account to enjoy wonderful and fresh meals
           available any time!
         </div>
-
+        {isError && (
+          <div className="d-block invalid-feedback">
+            We're sorry, there is an error with your email and/or password. Make
+            sure you are using a resgistered username and the associated
+            password. Please try again.
+          </div>
+        )}
         <form onSubmit={onSubmitHandler}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
@@ -102,10 +126,11 @@ const Login = (props) => {
               id="exampleCheck1"
             />
             <label className="form-check-label" htmlFor="exampleCheck1">
-              Check me out
+              Remember me
             </label>
           </div>
-          <FormSubmitButton name="Sign In" />
+          {!isLoading && <FormSubmitButton name="Sign In" />}
+          {isLoading && <Spinner />}
         </form>
       </div>
       <div className={classes.divider}></div>
