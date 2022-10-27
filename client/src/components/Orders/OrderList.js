@@ -2,7 +2,7 @@ import { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import OrderListItem from "./OrderListItem";
-import classes from "./OrderList.module.css"
+import classes from "./OrderList.module.css";
 import { fectOrders } from "../../actions/order";
 // const order = [{
 //     id: 2342,
@@ -25,25 +25,20 @@ import { fectOrders } from "../../actions/order";
 //     total: 59.00
 // },]
 
-const OrderList = () => {
+const OrderList = ({ orders }) => {
+  console.log("in order");
 
-    const dispatch = useDispatch();
+  console.log(orders);
+  const ordersList = orders.map((item) => (
+    <OrderListItem
+      key={item.id}
+      id={item.id}
+      date={item.date}
+      total={item.total}
+    />
+  ));
 
-    useEffect(() => {
-        dispatch(fectOrders("johndoe"));
-    }, [])
-
-    const order = useSelector(state => state.order)
-
-    console.log(order);
-    const ordersList =  order.map(item => <OrderListItem key={item.id} id={item.id} date={item.date} total={item.total} />)
-
-    return (
-        <div className={classes.ordersList}>
-            {ordersList}
-        </div>
-    )
-}
-
+  return <div className={classes.ordersList}>{ordersList}</div>;
+};
 
 export default OrderList;

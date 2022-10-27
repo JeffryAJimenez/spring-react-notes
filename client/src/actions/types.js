@@ -2,13 +2,15 @@ export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAIL = "REGISTER_FAIL";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
-export const LOGOUT= "LOGOUT";
+export const LOGOUT = "LOGOUT";
 
-export const SET_MESSAGE ="SET_MESSAGE";
+export const SET_MESSAGE = "SET_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
 export const CART_ADD_ITEM = "CART_ADD_ITEM";
-export const CART_REMOVE_ITEM="CART_REMOVE_ITEM";
+export const CART_REMOVE_ITEM = "CART_REMOVE_ITEM";
 
 export const ORDERS_SUCCESS = "ORDERS_SUCCESS";
 export const ORDERS_FAIL = "ORDERS_FAIL";
+
+export const GET_CURRENT_USER = "GET_CURRENT_USER";

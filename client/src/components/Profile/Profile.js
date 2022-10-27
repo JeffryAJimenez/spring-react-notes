@@ -9,17 +9,42 @@ import RightIcon from "./RightIcon";
 import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "../../actions/auth";
+import { useEffect, useState } from "react";
+import { getCurrentUser } from "../../actions/user";
+import { fectOrders } from "../../actions/order";
+
+import Spinner from "../UI/Spinner";
 
 const Profile = (props) => {
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+  });
+
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.auth.user);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const orders = useSelector((state) => state.order);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    dispatch(getCurrentUser()).then((res) => {
+      setUser({ username: res.username, email: res.email });
+    });
+
+    dispatch(fectOrders("johndoe")).finally(setIsLoading(false));
+  }, [dispatch]);
 
   const logoutHandler = () => {
     console.log("signing out bye!");
     dispatch(logout());
     props.onClose();
   };
+
+  if (!isLoggedIn) {
+    props.onClose();
+  }
 
   return (
     <Modal onClose={props.onClose}>
@@ -62,7 +87,14 @@ const Profile = (props) => {
         </div>
       </div>
 
-      <OrderList />
+      {isLoading && (
+        <div className={classes.spinner}>
+          <div className={classes["spinner-child"]}>
+            <Spinner />
+          </div>
+        </div>
+      )}
+      {!isLoading && <OrderList orders={orders} />}
 
       <div className={classes["buttons-next"]}>
         <Button>
