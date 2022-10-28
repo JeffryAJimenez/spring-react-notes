@@ -59,6 +59,7 @@ const Cart = (props) => {
       return;
     }
 
+    setIsError(false);
     setIsLoading(true);
 
     dispatch(
@@ -90,7 +91,7 @@ const Cart = (props) => {
   );
 
   const errorMessage = (
-    <div className={classes.warning}>
+    <div className={`${classes.warning} ${classes.bump}`}>
       We had an issue proccessing your order. Please try again!
     </div>
   );

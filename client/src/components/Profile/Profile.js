@@ -94,17 +94,7 @@ const Profile = (props) => {
           </div>
         </div>
       )}
-      {!isLoading && <OrderList orders={orders} />}
-
-      <div className={classes["buttons-next"]}>
-        <Button>
-          <LeftIcon />
-        </Button>
-
-        <Button>
-          <RightIcon />
-        </Button>
-      </div>
+      {!isLoading && <OrderList orders={orders} pageLimit={5} dataLimit={5} />}
 
       <div className={classes.actions}>
         <button className={classes["button--alt"]} onClick={props.onClose}>

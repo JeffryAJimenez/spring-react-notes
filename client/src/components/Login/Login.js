@@ -35,7 +35,7 @@ const Login = (props) => {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-
+    setIsError(false);
     if (!usernameIsValid || !passwordIsValid) {
       usernameBlurHandler();
       passwordBlurHandler();
@@ -85,7 +85,7 @@ const Login = (props) => {
           available any time!
         </div>
         {isError && (
-          <div className="d-block invalid-feedback">
+          <div className={`${classes.bump} d-block invalid-feedback`}>
             We're sorry, there is an error with your email and/or password. Make
             sure you are using a resgistered username and the associated
             password. Please try again.
