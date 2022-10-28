@@ -67,18 +67,26 @@ function App() {
 
   const reDirectToRegisterHandler = () => {
     setLoginIsShow(false);
+    setCartIsShow(false);
+    setProfileIsShow(false);
+
     setRegisterIsShow(true);
   };
 
   const reDirectToLoginHandler = () => {
     setRegisterIsShow(false);
+    setCartIsShow(false);
+    setProfileIsShow(false);
+
     setLoginIsShow(true);
   };
 
   return (
     <Fragment>
       {profileIsShow && <Profile onClose={hideProfileHandler} />}
-      {cartIsShow && <Cart onClose={hideCartHandler} />}
+      {cartIsShow && (
+        <Cart onClose={hideCartHandler} onLogin={reDirectToLoginHandler} />
+      )}
       {loginIsShow && (
         <Login
           onClose={hideLoginHandler}

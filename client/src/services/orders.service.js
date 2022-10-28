@@ -3,7 +3,7 @@ import authHeader from "./auth-header";
 
 const API_URL = "http://localhost:8762/orders";
 
-const order = [
+const orders = [
   {
     id: 2342,
     date: "06/04/2022",
@@ -29,8 +29,16 @@ const order = [
 const fectOrders = (username) => {
   // return axios.get(API_URL + username, {headers: authHeader()});
   return new Promise((resolve, reject) => {
+    resolve(orders);
+  });
+};
+
+const postOrder = (order) => {
+  // return axios.get(API_URL + username, {headers: authHeader()});
+  return new Promise((resolve, reject) => {
+    orders.push(order);
     resolve(order);
   });
 };
 
-export default { fectOrders };
+export default { fectOrders, postOrder };

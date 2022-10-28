@@ -9,8 +9,10 @@ export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
 export const CART_ADD_ITEM = "CART_ADD_ITEM";
 export const CART_REMOVE_ITEM = "CART_REMOVE_ITEM";
+export const CLEAR_CART = "CLEAR_CART";
 
 export const ORDERS_SUCCESS = "ORDERS_SUCCESS";
 export const ORDERS_FAIL = "ORDERS_FAIL";
+export const POSTED_ORDER_SUCCESS = "POSTED_ORDER_SUCCESS";
 
 export const GET_CURRENT_USER = "GET_CURRENT_USER";

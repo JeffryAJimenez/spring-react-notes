@@ -1,73 +1,75 @@
-import {CART_ADD_ITEM, CART_REMOVE_ITEM} from "../actions/types";
+import { CART_ADD_ITEM, CART_REMOVE_ITEM, CLEAR_CART } from "../actions/types";
 
 const initialState = {
-    items: [],
-    totalAmount: 0
-}
+  items: [],
+  totalAmount: 0,
+};
 
-export default function(state = initialState, action){
+export default function (state = initialState, action) {
+  const { type, payload } = action;
 
-    const {type, payload} = action;
+  switch (type) {
+    case CART_ADD_ITEM:
+      const totalAmount = state.totalAmount + payload.price * payload.amount;
 
-    switch(type){
+      const existingCartItemIndex = state.items.findIndex(
+        (item) => item.id === payload.id
+      );
 
-        case CART_ADD_ITEM:
-            
-            const totalAmount = state.totalAmount + payload.price * payload.amount;
-            
-            const existingCartItemIndex = state.items.findIndex(item => item.id === payload.id);
+      const existingCartItem = state.items[existingCartItemIndex];
 
-            const existingCartItem = state.items[existingCartItemIndex];
+      let updatedItem;
+      let updatedItems;
 
+      if (existingCartItem) {
+        updatedItem = {
+          ...existingCartItem,
+          amount: existingCartItem.amount + payload.amount,
+        };
 
-            let updatedItem;
-            let updatedItems;
+        updatedItems = [...state.items];
+        updatedItems[existingCartItemIndex] = updatedItem;
+      } else {
+        updatedItem = { ...payload };
+        updatedItems = [...state.items, updatedItem];
+      }
 
-            if(existingCartItem){
-                updatedItem = {
-                    ...existingCartItem,
-                    amount: existingCartItem.amount + payload.amount
-                }
+      return {
+        items: updatedItems,
+        totalAmount: totalAmount,
+      };
 
-                updatedItems = [...state.items];
-                updatedItems[existingCartItemIndex] = updatedItem;
-            }else {
+    case CART_REMOVE_ITEM:
+      const existingCartItemIndex2 = state.items.findIndex(
+        (item) => item.id === payload
+      );
+      const existingCartItem2 = state.items[existingCartItemIndex2];
 
-                updatedItem = {...payload};
-                updatedItems = [...state.items, updatedItem];
-            }
+      const updatedTotalAmount2 = state.totalAmount - existingCartItem2.price;
 
+      let updatedItems2;
 
-            return {
-                items: updatedItems,
-                totalAmount: totalAmount
-            };
-            
+      if (existingCartItem2.amount === 1) {
+        updatedItems2 = state.items.filter((item) => item.id !== payload);
+      } else {
+        const updatedItem = {
+          ...existingCartItem2,
+          amount: existingCartItem2.amount - 1,
+        };
+        updatedItems2 = [...state.items];
+        updatedItems2[existingCartItemIndex2] = updatedItem;
+      }
 
-        case CART_REMOVE_ITEM:
-            const existingCartItemIndex2 = state.items.findIndex(item => item.id === payload);
-            const existingCartItem2 = state.items[existingCartItemIndex2];
-            
-            const updatedTotalAmount2 = state.totalAmount - existingCartItem2.price;
+      return {
+        items: updatedItems2,
+        totalAmount: updatedTotalAmount2,
+      };
 
-            let updatedItems2;
-
-            if(existingCartItem2.amount === 1) {
-                
-                updatedItems2 = state.items.filter(item => item.id !== payload);
-
-            }else {
-                const updatedItem = {...existingCartItem2, amount: existingCartItem2.amount - 1};
-                updatedItems2 = [...state.items];
-                updatedItems2[existingCartItemIndex2] = updatedItem;
-            }
-
-            return {
-                items: updatedItems2,
-                totalAmount: updatedTotalAmount2
-            };
-
-        default:
-            return state;
+    case CLEAR_CART: {
+      return initialState;
     }
+
+    default:
+      return state;
+  }
 }
