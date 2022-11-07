@@ -14,6 +14,7 @@ import { getCurrentUser } from "../../actions/user";
 import { fectOrders } from "../../actions/order";
 
 import Spinner from "../UI/Spinner";
+import { Link } from "react-router-dom";
 
 const Profile = (props) => {
   const [user, setUser] = useState({
@@ -39,6 +40,10 @@ const Profile = (props) => {
   const logoutHandler = () => {
     console.log("signing out bye!");
     dispatch(logout());
+    props.onClose();
+  };
+
+  const editProfileHandler = () => {
     props.onClose();
   };
 
@@ -80,9 +85,11 @@ const Profile = (props) => {
               <LogoutIcon />
             </Button>
 
-            <Button name="edit profile">
-              <EditIcon />
-            </Button>
+            <Link to="/edit">
+              <Button name="edit profile" onClick={editProfileHandler}>
+                <EditIcon />
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

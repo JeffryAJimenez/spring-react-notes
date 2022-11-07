@@ -4,7 +4,15 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  CHANGE_EMAIL_SUCCESS,
   SET_MESSAGE,
+  CHANGE_EMAIL_ERROR,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_ERROR,
+  CHANGE_USERNAME_ERROR,
+  CHANGE_USERNAME_SUCCESS,
+  CHANGE_FULLNAME_ERROR,
+  CHANGE_FULLNAME_SUCCESS,
 } from "./types";
 
 import AuthService from "../services/auth.service";
@@ -110,6 +118,94 @@ export const loginFirebase = (username, password) => (dispatch) => {
       });
 
       return Promise.reject();
+    }
+  );
+};
+
+export const changeEmailFirebase = (email) => (dispatch) => {
+  return AuthService.firebaseChangeEmail(email).then(
+    (response) => {
+      dispatch({
+        type: CHANGE_EMAIL_SUCCESS,
+        payload: null,
+      });
+
+      return Promise.resolve(response);
+    },
+
+    (error) => {
+      dispatch({
+        type: CHANGE_EMAIL_ERROR,
+        payload: null,
+      });
+
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const changePasswordFirebase = (password) => (dispatch) => {
+  return AuthService.firebaseChangePassword(password).then(
+    (response) => {
+      dispatch({
+        type: CHANGE_PASSWORD_SUCCESS,
+        payload: null,
+      });
+
+      return Promise.resolve(response);
+    },
+
+    (error) => {
+      dispatch({
+        type: CHANGE_PASSWORD_ERROR,
+        payload: null,
+      });
+
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const changeUsernameFirebase = (username) => (dispatch) => {
+  return AuthService.firebaseChangeUsername(username).then(
+    (response) => {
+      dispatch({
+        type: CHANGE_USERNAME_SUCCESS,
+        payload: null,
+      });
+
+      return Promise.resolve(response);
+    },
+
+    (error) => {
+      dispatch({
+        type: CHANGE_USERNAME_ERROR,
+        payload: null,
+      });
+
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const changeFullnameFirebase = (fullname) => (dispatch) => {
+  return AuthService.firebaseChangeFullname(fullname).then(
+    (response) => {
+      dispatch({
+        type: CHANGE_FULLNAME_SUCCESS,
+        payload: null,
+      });
+
+      return Promise.resolve(response);
+    },
+
+    (error) => {
+      dispatch({
+        type: CHANGE_FULLNAME_ERROR,
+        payload: null,
+      });
+
+      return Promise.reject(error);
     }
   );
 };

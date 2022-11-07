@@ -4,6 +4,14 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  CHANGE_EMAIL_ERROR,
+  CHANGE_EMAIL_SUCCESS,
+  CHANGE_PASSWORD_ERROR,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_USERNAME_ERROR,
+  CHANGE_USERNAME_SUCCESS,
+  CHANGE_FULLNAME_ERROR,
+  CHANGE_FULLNAME_SUCCESS,
 } from "../actions/types";
 
 const token = JSON.parse(localStorage.getItem("token"));
@@ -42,6 +50,16 @@ export default function (state = initialState, action) {
         isLoggedIn: false,
         user: null,
       };
+    case CHANGE_EMAIL_ERROR:
+    case CHANGE_EMAIL_SUCCESS:
+    case CHANGE_PASSWORD_ERROR:
+    case CHANGE_PASSWORD_SUCCESS:
+    case CHANGE_USERNAME_ERROR:
+    case CHANGE_USERNAME_SUCCESS:
+    case CHANGE_FULLNAME_ERROR:
+    case CHANGE_FULLNAME_SUCCESS:
+      return { ...state };
+
     default:
       return state;
   }

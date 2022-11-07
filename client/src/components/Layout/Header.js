@@ -6,6 +6,7 @@ import mealsImage from "../../assets/meals.jpeg";
 import classes from "./Header.module.css";
 import HeaderProfileButton from "./buttons/HeaderProfileButton";
 import HeaderLoginButton from "./buttons/HeaderLoginButton";
+import { Link } from "react-router-dom";
 
 const Header = (props) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -18,7 +19,9 @@ const Header = (props) => {
   return (
     <Fragment>
       <header className={classes.header}>
-        <h1>ReactMeals</h1>
+        <Link to="/">
+          <h1 className={classes.logo}>ReactMeals</h1>
+        </Link>
 
         <div className={classes.nav}>
           <HeaderCartButton onClick={props.onShowCart} />

@@ -80,11 +80,67 @@ const firebaseLogin = (email, password, dispatch) => {
     });
 };
 
-const activateLogoutTimer = (time, dispatch) => {
-  const remainingTime = calculateRemainingTime(time);
+const firebaseChangeEmail = (email) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const request_obj = {
+    email,
+    idToken: token,
+    returnSecureToken: true,
+  };
 
+  console.log(request_obj);
+  return axios.post(FBGOO_CHANGE_EMAIL, request_obj).then((response) => {
+    return response.data;
+  });
+};
+
+const firebaseChangePassword = (password) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const request_obj = {
+    password,
+    idToken: token,
+    returnSecureToken: true,
+  };
+
+  return axios.post(FBGOO_CHANGE_EMAIL, request_obj).then((response) => {
+    return response.data;
+  });
+};
+
+const firebaseChangeUsername = (username) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const request_obj = {
+    username,
+    idToken: token,
+    returnSecureToken: true,
+  };
+
+  return axios.post(FBGOO_CHANGE_EMAIL, request_obj).then((response) => {
+    return response.data;
+  });
+};
+
+const firebaseChangeFullname = (fullname) => {
+  const token = JSON.parse(localStorage.getItem("token"));
+  const request_obj = {
+    fullname,
+    idToken: token,
+    returnSecureToken: true,
+  };
+
+  return axios.post(FBGOO_CHANGE_EMAIL, request_obj).then((response) => {
+    return response.data;
+  });
+};
+
+const activateLogoutTimer = (time, dispatch) => {
+  const remainingTime = calculateRemainingTime(
+    new Date().getTime() + time * 1000
+  );
+  console.log("inside activateLogoutTimer: " + remainingTime);
   if (!logoutTimer) {
     logoutTimer = setTimeout(() => {
+      console.log("calling logout");
       logout();
       dispatch({
         type: LOGOUT,
@@ -108,6 +164,10 @@ export default {
   logout,
   firebaseRegister,
   firebaseLogin,
+  firebaseChangeEmail,
+  firebaseChangePassword,
+  firebaseChangeUsername,
+  firebaseChangeFullname,
   calculateRemainingTime,
   activateLogoutTimer,
 };

@@ -1,0 +1,115 @@
+.body {
+  align-items: baseline;
+  display: flex;
+  flex-flow: row wrap;
+  margin-left: -6px;
+  margin-right: -6px;
+}
+
+.title {
+  flex-basis: auto;
+  padding-left: 6px;
+  padding-right: 6px;
+  min-width: 0px;
+  width: 25%;
+  display: block;
+}
+.title span {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  font-weight: 700;
+}
+
+.value {
+  flex: 1 1 0%;
+  padding-left: 6px;
+  padding-right: 6px;
+  min-width: 0px;
+  display: block;
+}
+
+.action {
+  flex-basis: auto;
+  padding-left: 6px;
+  padding-right: 6px;
+  min-width: 0px;
+  display: block;
+}
+
+.button {
+  cursor: pointer;
+  color: rgb(19, 107, 234);
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-top: -8px;
+  margin-bottom: -8px;
+  display: inline-block;
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: currentColor;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+.button:hover {
+  text-decoration: underline;
+}
+
+.divider {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.063);
+  border-top-color: rgba(0, 0, 0, 0.063);
+  border-right-color: rgba(0, 0, 0, 0.063);
+  border-left-color: rgba(0, 0, 0, 0.063);
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.input-div {
+  height: 46px;
+  margin-bottom: 16px;
+}
+
+.input-div input {
+  height: 46px;
+}
+
+.form {
+  width: 50%;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.warning {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545;
+  margin-bottom: 16px;
+}
+
+.bump {
+  animation: bump 1000ms ease-out;
+}
+
+@keyframes bump {
+  0% {
+    transform: scale(0.8);
+  }
+  10% {
+    transform: scale(0.9);
+  }
+  30% {
+    transform: scale(1);
+  }
+  /* 50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  } */
+}

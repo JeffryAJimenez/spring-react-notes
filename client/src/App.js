@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,6 +14,7 @@ import Profile from "./components/Profile/Profile";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import authService from "./services/auth.service";
+import EditProfile from "./components/EditProfile/EditProfile";
 
 function App() {
   const [cartIsShow, setCartIsShow] = useState(false);
@@ -21,6 +22,7 @@ function App() {
   const [loginIsShow, setLoginIsShow] = useState(false);
   const [registerIsShow, setRegisterIsShow] = useState(false);
 
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,10 +30,16 @@ function App() {
       JSON.parse(localStorage.getItem("expirationTime"))
     );
 
+    console.log("time left");
+    console.log(timeLeft);
     if (timeLeft <= 0) {
       dispatch(logout);
+      console.log("no time");
     } else {
-      authService.activateLogoutTimer(timeLeft, dispatch);
+      authService.activateLogoutTimer(
+        JSON.parse(localStorage.getItem("expirationTime")),
+        dispatch
+      );
       console.log(timeLeft);
     }
   }, [dispatch]);
@@ -110,6 +118,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Meals />} />
+            {isLoggedIn && <Route path="edit" element={<EditProfile />} />}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

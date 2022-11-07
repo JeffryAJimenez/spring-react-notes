@@ -9,17 +9,21 @@ import ButtonInverted from "../UI/ButtonInverted";
 import useInput from "../../hooks/useInput";
 import authService from "../../services/auth.service";
 import Spinner from "../UI/Spinner";
+import useValidation from "../../hooks/useValidation";
 
 const Register = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [emailIsTaken, setEmailIsTaken] = useState(false);
   const [usernameIsTaken, setUsernameIsTaken] = useState(false);
 
-  let mediumPasswordRegex = new RegExp(
-    "((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))"
-  );
-
-  let emailRegex = new RegExp("[a-z0-9]+@[a-z]+.[a-z]{2,3}");
+  const {
+    isEmailValid,
+    isPasswordValid,
+    isUsernameValid,
+    isFirstNameValid,
+    isLastNameValid,
+    isEqual,
+  } = useValidation();
 
   const {
     value: firstname,
@@ -27,7 +31,7 @@ const Register = (props) => {
     hasError: firstnameHasError,
     valueChangeHandler: firstnameChangeHandler,
     inputBlurHandler: firstnameBlurHandler,
-  } = useInput((value) => value.trim() !== "" && value.length < 15);
+  } = useInput(isFirstNameValid);
 
   const {
     value: lastname,
@@ -35,7 +39,7 @@ const Register = (props) => {
     hasError: lastnameHasError,
     valueChangeHandler: lastnameChangeHandler,
     inputBlurHandler: lastnameBlurHandler,
-  } = useInput((value) => value.trim() !== "" && value.length < 15);
+  } = useInput(isLastNameValid);
 
   const {
     value: email,
@@ -43,7 +47,7 @@ const Register = (props) => {
     hasError: emailHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-  } = useInput((value) => emailRegex.test(value));
+  } = useInput(isEmailValid);
 
   const {
     value: username,
@@ -51,7 +55,7 @@ const Register = (props) => {
     hasError: usernameHasError,
     valueChangeHandler: usernameChangeHandler,
     inputBlurHandler: usernameBlurHandler,
-  } = useInput((value) => value.trim() !== "" && value.length > 3);
+  } = useInput(isUsernameValid);
 
   const {
     value: password,
@@ -59,14 +63,14 @@ const Register = (props) => {
     hasError: passwordHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput((value) => mediumPasswordRegex.test(value));
+  } = useInput(isPasswordValid);
 
   const {
     value: confirmPassword,
     isValid: confirmPasswordIsValid,
     valueChangeHandler: confirmPasswordChangeHandler,
     inputBlurHandler: confirmPasswordBlurHandler,
-  } = useInput((value) => value === password);
+  } = useInput((value) => isEqual(value, password));
 
   const onChangeEmailHandler = (e) => {
     setEmailIsTaken(false);
