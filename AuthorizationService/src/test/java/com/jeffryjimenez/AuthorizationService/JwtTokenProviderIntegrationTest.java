@@ -1,4 +1,4 @@
-package com.jeffryjimenez.AuthorizationService.integration.service;
+package com.jeffryjimenez.AuthorizationService;
 
 import com.jeffryjimenez.AuthorizationService.service.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
@@ -29,7 +29,7 @@ public class JwtTokenProviderIntegrationTest {
 
         Authentication authentication =
                 authenticationManager
-                        .authenticate(new UsernamePasswordAuthenticationToken("user1", "password"));
+                        .authenticate(new UsernamePasswordAuthenticationToken("user1", "Password#0"));
 
 
         String actual = jwtTokenProvider.generateToken(authentication);
@@ -45,7 +45,7 @@ public class JwtTokenProviderIntegrationTest {
         String username =  "user1";
         Authentication authentication =
                 authenticationManager
-                        .authenticate(new UsernamePasswordAuthenticationToken(username, "password"));
+                        .authenticate(new UsernamePasswordAuthenticationToken(username, "Password#0"));
 
 
         String token = jwtTokenProvider.generateToken(authentication);
@@ -62,7 +62,7 @@ public class JwtTokenProviderIntegrationTest {
         String username =  "user1";
         Authentication authentication =
                 authenticationManager
-                        .authenticate(new UsernamePasswordAuthenticationToken(username, "password"));
+                        .authenticate(new UsernamePasswordAuthenticationToken(username, "Password#0"));
 
 
         String token = jwtTokenProvider.generateToken(authentication);

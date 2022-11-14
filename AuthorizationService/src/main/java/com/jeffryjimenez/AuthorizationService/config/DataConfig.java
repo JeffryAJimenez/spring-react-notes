@@ -19,10 +19,10 @@ public class DataConfig {
 
         return x -> {
 
-            userRepository.save(new Users("admin1", passwordEncoder.encode("password"),"admin1@email.com","ADMIN" ));
-            userRepository.save(new Users("admin2", passwordEncoder.encode("password"),"admin2@email.com","ADMIN"));
-            userRepository.save(new Users("user1", passwordEncoder.encode("password"),"user1@email.com","ROLE_USER"));
-            userRepository.save(new Users("user2", passwordEncoder.encode("password"),"user2@email.com","ROLE_USER"));
+            userRepository.save(new Users("admin1", "Johnathan Joestar", passwordEncoder.encode("password"),"admin1@email.com","ADMIN" ));
+            userRepository.save(new Users("admin2", "Martin Almanzar", passwordEncoder.encode("password"),"admin2@email.com","ADMIN"));
+            userRepository.save(new Users("user1", "Dimitri Makarov", passwordEncoder.encode("Password#0"),"user1@email.com","ROLE_USER"));
+            userRepository.save(new Users("user2", "Alex Mason", passwordEncoder.encode("password"),"user2@email.com","ROLE_USER"));
 
         };
     }

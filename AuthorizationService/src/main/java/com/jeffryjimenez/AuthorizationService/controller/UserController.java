@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -132,6 +133,36 @@ public class UserController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(summaries);
+    }
+
+    @PatchMapping(value = ("/users/update/email"), produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUserEmail(@RequestBody UpdateUserFieldRequest userFieldRequest, Principal principal){
+
+        Users updateUser = userService.updateUserEmail(principal.getName(), userFieldRequest.getValue());
+
+        UserSummary summary = convertTo(updateUser);
+
+        return ResponseEntity.ok(summary);
+    }
+
+    @PatchMapping(value = ("/users/update/full-name"), produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUserFullName(@RequestBody UpdateUserFieldRequest userFieldRequest, Principal principal){
+
+        Users updateUser = userService.updateUserFullName(principal.getName(), userFieldRequest.getValue());
+
+        UserSummary summary = convertTo(updateUser);
+
+        return ResponseEntity.ok(summary);
+    }
+
+    @PatchMapping(value = ("/users/update/password"), produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUserPassword(@RequestBody UpdateUserFieldRequest userFieldRequest, Principal principal){
+
+        Users updateUser = userService.updateUserPassword(principal.getName(), userFieldRequest.getValue());
+
+        UserSummary summary = convertTo(updateUser);
+
+        return ResponseEntity.ok(summary);
     }
 
     private UserSummary convertTo(Users user){

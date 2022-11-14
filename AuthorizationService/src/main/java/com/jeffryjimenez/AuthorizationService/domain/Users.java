@@ -27,6 +27,7 @@ public class Users implements UserDetails {
     @Id
     long id;
     private String username;
+    private String fullName;
     private String password;
     private String email;
     private String role;
@@ -40,17 +41,26 @@ public class Users implements UserDetails {
         this.active = true;
     }
 
+    public Users(String username, String fullName, String password, String email, String role){
+        this.fullName = fullName;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.active = true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
-        return id == users.id && active == users.active && Objects.equals(username, users.username) && Objects.equals(password, users.password) && Objects.equals(email, users.email) && Objects.equals(role, users.role);
+        return id == users.id && active == users.active && username.equals(users.username) && fullName.equals(users.fullName) && password.equals(users.password) && email.equals(users.email) && role.equals(users.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, email, role, active);
+        return Objects.hash(id, username, fullName, password, email, role, active);
     }
 
     @Override

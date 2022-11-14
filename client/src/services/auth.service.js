@@ -3,6 +3,14 @@ import axios from "axios";
 import { LOGOUT } from "../actions/types";
 
 const API_URL = "http://localhost:8762/auth/";
+const FBGOO_REGISTER =
+  "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDgPro4E7mvHr0pvlssXEEmJ8Ca8F_t1W4";
+
+const FBGOO_LOGIN =
+  "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDgPro4E7mvHr0pvlssXEEmJ8Ca8F_t1W4";
+
+const FBGOO_CHANGE_EMAIL =
+  "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDgPro4E7mvHr0pvlssXEEmJ8Ca8F_t1W4";
 
 let logoutTimer;
 
