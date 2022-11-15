@@ -4,37 +4,37 @@ import Button from "../UI/Button";
 import LogoutIcon from "./LogoutIcon";
 import classes from "./Profile.module.css";
 import OrderList from "../Orders/OrderList";
-import LeftIcon from "./LeftIcon";
-import RightIcon from "./RightIcon";
 import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "../../actions/auth";
 import { useEffect, useState } from "react";
-import { getCurrentUser } from "../../actions/user";
-import { fectOrders } from "../../actions/order";
+import { getCurrentUser } from "../../actions/auth";
+import { getOrdersInfo } from "../../actions/order";
 
-import Spinner from "../UI/Spinner";
 import { Link } from "react-router-dom";
 
 const Profile = (props) => {
   const [user, setUser] = useState({
     username: "",
-    email: "",
   });
+
+  const [total, setTotal] = useState(0.0);
+  const [ordersCount, setOrdersCount] = useState(0);
 
   const dispatch = useDispatch();
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const orders = useSelector((state) => state.order);
-
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     dispatch(getCurrentUser()).then((res) => {
-      setUser({ username: res.username, email: res.email });
+      console.log(res);
+      setUser({ username: res.username });
     });
 
-    dispatch(fectOrders("johndoe")).finally(setIsLoading(false));
+    dispatch(getOrdersInfo()).then((res) => {
+      setTotal(res.total);
+      setOrdersCount(res.numOfOrders);
+    });
   }, [dispatch]);
 
   const logoutHandler = () => {
@@ -51,6 +51,13 @@ const Profile = (props) => {
     props.onClose();
   }
 
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  const totalUSD = formatter.format(total);
+
   return (
     <Modal onClose={props.onClose}>
       {/* <div class="container mt-5 d-flex justify-content-center"> */}
@@ -66,17 +73,16 @@ const Profile = (props) => {
 
         <div className={classes["body-left"]}>
           <h4 className={classes.name}>{user.username}</h4>
-          <span>{user.email}</span>
 
           <div className={classes.stats}>
             <div className={classes["stats-item"]}>
               <span className={classes["stats-item-title"]}>Orders</span>
-              <span>38</span>
+              <span>{ordersCount}</span>
             </div>
 
             <div className={classes["stats-item"]}>
               <span className={classes["stats-item-title"]}>Total</span>
-              <span>$200,2220</span>
+              <span>{totalUSD}</span>
             </div>
           </div>
 
@@ -94,14 +100,7 @@ const Profile = (props) => {
         </div>
       </div>
 
-      {isLoading && (
-        <div className={classes.spinner}>
-          <div className={classes["spinner-child"]}>
-            <Spinner />
-          </div>
-        </div>
-      )}
-      {!isLoading && <OrderList orders={orders} pageLimit={5} dataLimit={5} />}
+      <OrderList />
 
       <div className={classes.actions}>
         <button className={classes["button--alt"]} onClick={props.onClose}>

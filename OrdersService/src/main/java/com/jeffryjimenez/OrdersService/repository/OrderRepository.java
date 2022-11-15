@@ -17,4 +17,10 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     @Modifying
     @Query("UPDATE Order o SET o.creator = :newCreator WHERE o.creator = :oldCreator ")
     int updateOderCreatorByCreator(@Param(value = "oldCreator") String oldCreator, @Param(value = "newCreator") String newCreator);
+
+    @Query("SELECT COUNT(o) FROM Order o WHERE o.creator = :creator")
+    public long countOfOrdersByUsername(@Param(value = "creator") String creator);
+
+    @Query("SELECT SUM(o.total) FROM Order o WHERE o.creator = :creator")
+    public double totalSumByUsername(@Param(value = "creator") String creator);
 }

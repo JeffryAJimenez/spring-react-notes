@@ -26,9 +26,11 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/auth")
 @Slf4j
 public class UserController {
@@ -66,11 +68,8 @@ public class UserController {
                 .password(payload.getPassword())
                 .build();
 
-        try {
             userService.registerUser(user);
-        } catch (UsernameAlreadyExistsException | EmailAlreadyExistsException e) {
-            throw new BadCredentialsException(e.getMessage());
-        }
+
 
         URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(user.getUsername()).toUri();
@@ -97,11 +96,15 @@ public class UserController {
     @GetMapping(value = "/users/me", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasRole('USER')")
     @ResponseStatus(HttpStatus.OK)
-    public UserSummary getCurrentUser(@AuthenticationPrincipal Users user){
-        return UserSummary.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .build();
+    public UserSummary getCurrentUser(Principal principal){
+
+        Optional<Users> usersOptional = userService.findByUsername(principal.getName());
+
+        if(usersOptional.isEmpty()){
+            throw new ResourceNotFoundException(principal.getName());
+        }
+
+        return convertTo(usersOptional.get());
     }
 
     @GetMapping(value="/users/summary/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -170,6 +173,8 @@ public class UserController {
         return UserSummary.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
                 .build();
     }
 

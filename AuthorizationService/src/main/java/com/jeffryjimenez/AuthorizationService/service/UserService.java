@@ -69,7 +69,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
         Users savedUser = userRepository.save(user);
-        kafkaUserMessagingService.sendUserCreated(savedUser);
+//        kafkaUserMessagingService.sendUserCreated(savedUser);
 
         return savedUser;
     }

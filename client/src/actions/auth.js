@@ -13,6 +13,8 @@ import {
   CHANGE_USERNAME_SUCCESS,
   CHANGE_FULLNAME_ERROR,
   CHANGE_FULLNAME_SUCCESS,
+  GET_CURRENT_USER_SUCCESS,
+  GET_CURRENT_USER_ERROR,
 } from "./types";
 
 import AuthService from "../services/auth.service";
@@ -204,6 +206,20 @@ export const changeFullnameFirebase = (fullname) => (dispatch) => {
         type: CHANGE_FULLNAME_ERROR,
         payload: null,
       });
+
+      return Promise.reject(error);
+    }
+  );
+};
+
+export const getCurrentUser = (_) => (dispatch) => {
+  return AuthService.getCurrentUser().then(
+    (response) => {
+      dispatch({ type: GET_CURRENT_USER_SUCCESS });
+      return Promise.resolve(response);
+    },
+    (error) => {
+      dispatch({ type: GET_CURRENT_USER_ERROR });
 
       return Promise.reject(error);
     }

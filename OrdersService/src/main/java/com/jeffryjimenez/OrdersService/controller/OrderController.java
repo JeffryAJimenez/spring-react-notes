@@ -2,6 +2,7 @@ package com.jeffryjimenez.OrdersService.controller;
 
 import com.jeffryjimenez.OrdersService.domain.Order;
 import com.jeffryjimenez.OrdersService.payload.OrderRequest;
+import com.jeffryjimenez.OrdersService.payload.OrdersInfoResponse;
 import com.jeffryjimenez.OrdersService.repository.OrderRepository;
 import com.jeffryjimenez.OrdersService.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/orders")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class OrderController {
 
     private OrderService orderService;
@@ -29,6 +31,23 @@ public class OrderController {
 
         return orderService.getAllByCreator(principal.getName(), pageable);
 
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<?> getOrdersInfo(Principal principal){
+
+
+        double totalSum = orderService.totalSumByUsername(principal.getName());
+        long countOrders  = orderService.countOfOrdersByUsername(principal.getName());
+
+        OrdersInfoResponse ordersInfoResponse =
+                OrdersInfoResponse
+                        .builder()
+                        .numOfOrders(countOrders)
+                        .total(totalSum)
+                        .build();
+
+        return ResponseEntity.ok(ordersInfoResponse);
     }
 
 //    @PatchMapping{"/{username}"}

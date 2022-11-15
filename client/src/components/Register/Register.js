@@ -104,34 +104,35 @@ const Register = (props) => {
 
     setIsLoading(true);
 
+    let name = firstname + " " + lastname;
+
     authService
-      .firebaseRegister(email, password)
-      .then((res) => {
-        if (res.status === 200) {
-        }
-      })
-      .catch((error) => {
-        let errorMessage = "Authentication failed!";
-
-        if (
-          error &&
-          error.response &&
-          error.response.data &&
-          error.response.data.error &&
-          error.response.data.error.message
-        ) {
-          errorMessage = error.response.data.error.message;
-
-          if (error.response.data.error.message === "EMAIL_EXISTS") {
-            setEmailIsTaken(true);
+      .firebaseRegister(name, username, email, password)
+      .then(
+        (res) => {
+          if (res.status === 200) {
           }
 
-          if (error.response.data.error.message === "USERNAME_EXISTS") {
-            setUsernameIsTaken(true);
+          setIsLoading(false);
+          props.onLogin();
+        },
+        (error) => {
+          let errorMessage = "Authentication failed!";
+          console.log(error);
+          if (error && error.response && error.response.data) {
+            if (error.response.data === "EMAIL-EXISTS") {
+              setEmailIsTaken(true);
+            }
+
+            if (error.response.data === "USERNAME-EXISTS") {
+              setUsernameIsTaken(true);
+            }
           }
+
+          setIsLoading(false);
         }
-      })
-      .finally(setIsLoading(false));
+      )
+      .finally();
   };
 
   const firstnameInputClasses = firstnameHasError
@@ -232,9 +233,7 @@ const Register = (props) => {
               onBlur={usernameBlurHandler}
             />
             {usernameIsTaken ? (
-              <div className={classes.warning}>
-                Email address already in use.
-              </div>
+              <div className={classes.warning}>Username already in use.</div>
             ) : (
               usernameInputWarning
             )}

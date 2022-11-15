@@ -17,6 +17,7 @@ const EditForm = ({
   onSubmit,
   hasError,
   isLoading,
+  customeErrorMsg,
 }) => {
   const {
     value: value,
@@ -69,12 +70,16 @@ const EditForm = ({
     ? ` form-control mb-3 is-invalid`
     : ` form-control mb-3`;
 
+  const errorMsg =
+    customeErrorMsg !== ""
+      ? customeErrorMsg
+      : "We're sorry, looks like we had an issue handeling your request. Make sure you are filling out the fields correctly. Please try again.";
+
   const form = (
     <Fragment>
       {hasError && (
         <div className={`${classes.bump} d-block invalid-feedback mb-3`}>
-          We're sorry, looks like we had an issue handeling your request. Make
-          sure you are filling out the fields correctly. Please try again.
+          {errorMsg}
         </div>
       )}
 

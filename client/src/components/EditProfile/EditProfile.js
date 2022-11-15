@@ -1,14 +1,18 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   changeEmailFirebase,
   changeFullnameFirebase,
+  changePasswordFirebase,
+  getCurrentUser,
 } from "../../actions/auth";
+
 import useValidation from "../../hooks/useValidation";
 import Card from "../UI/Card";
 import EditForm from "./EditForm";
 import EditNameForm from "./EditNameForm";
 import classes from "./EditProfile.module.css";
+
 const EditProfile = () => {
   const [showNameForm, setShowNameForm] = useState(false);
   const [showUsernameForm, setShowUsernameForm] = useState(false);
@@ -25,7 +29,17 @@ const EditProfile = () => {
   const [emailHasError, setEmailHasError] = useState(false);
   const [passwordHasError, setPasswordHasError] = useState(false);
 
+  const [userNameErrorMessage, setUsernameErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+
+  const [user, setUser] = useState({ username: "", email: "", fullName: "" });
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, [dispatch]);
 
   const {
     isEmailValid,
@@ -35,6 +49,16 @@ const EditProfile = () => {
     isLastNameValid,
     isEqual,
   } = useValidation();
+
+  const fetchUserDetails = () => {
+    dispatch(getCurrentUser()).then((res) => {
+      setUser({
+        username: res.username,
+        email: res.email,
+        fullName: res.fullName,
+      });
+    });
+  };
 
   const showNameHandler = () => {
     setShowUsernameForm(false);
@@ -87,51 +111,79 @@ const EditProfile = () => {
   const emailSubmitHandler = (email) => {
     setEmailHasError(false);
     setEmailIsLoading(true);
+    setEmailErrorMessage("");
 
     dispatch(changeEmailFirebase(email))
       .then((response) => {
         console.log("success");
         hideEmailFormHandler();
+        fetchUserDetails();
+        setEmailIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setEmailHasError(true);
-      })
-      .finally(setEmailIsLoading(false));
+
+        if (error && error.response && error.response.data) {
+          if (error.response.data === "EMAIL-EXISTS") {
+            setEmailErrorMessage("Email is already taken.");
+          }
+        }
+        setEmailIsLoading(false);
+      });
   };
 
   const passwordSubmitHandler = (password) => {
     setPasswordHasError(false);
+    setPasswordErrorMessage("");
     setPasswordIsLoading(true);
 
     //MAKE THE CHAMEPasswordAction
-    dispatch()
+    dispatch(changePasswordFirebase(password))
       .then((response) => {
         console.log("success");
         hidePasswordFormHandler();
+        fetchUserDetails();
+        setPasswordIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setPasswordHasError(true);
-      })
-      .finally(setPasswordIsLoading(false));
+
+        if (error && error.response && error.response.data) {
+          if (error.response.data === "PASSWORD-NOT-STRONG") {
+            setPasswordErrorMessage("Password is not strong enough.");
+          }
+        }
+
+        setPasswordIsLoading(false);
+      });
   };
 
   const usernameSubmitHandler = (username) => {
     setUsernameHasError(false);
     setUsernameIsLoading(true);
+    setUsernameErrorMessage("");
 
     //MAKE THE CHAME username dAction
     dispatch()
       .then((response) => {
         console.log("success");
         hideUsernameFormHandler();
+        fetchUserDetails();
+        setUsernameIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setUsernameHasError(true);
-      })
-      .finally(setUsernameIsLoading(false));
+
+        if (error && error.response && error.response.data) {
+          if (error.response.data === "USERNAME-EXISTS") {
+            setUsernameErrorMessage("Username is already taken.");
+          }
+        }
+        setUsernameIsLoading(false);
+      });
   };
 
   const nameSubmitHandler = (firstName, lastName) => {
@@ -143,12 +195,14 @@ const EditProfile = () => {
       .then((response) => {
         console.log("success");
         hideNameFormHandler();
+        fetchUserDetails();
+        setNameIsLoading(false);
       })
       .catch((error) => {
         console.log(error);
         setNameHasError(true);
-      })
-      .finally(setNameIsLoading(false));
+        setNameIsLoading(false);
+      });
   };
 
   return (
@@ -170,7 +224,7 @@ const EditProfile = () => {
               title="Full Name"
               title1="First Name"
               title2="Last Name"
-              input="John Doe"
+              input={user.fullName}
               formIsVisible={showNameForm}
               hideForm={hideNameFormHandler}
               showForm={showNameHandler}
@@ -180,11 +234,12 @@ const EditProfile = () => {
               type1="text"
               type2="text"
               hasError={nameHasError}
+              customeErrorMsg={""}
               isLoading={nameIsLoading}
             />
             <EditForm
               title="Username"
-              input="JohnDoe"
+              input={user.username}
               formIsVisible={showUsernameForm}
               hideForm={hideUsernameFormHandler}
               showForm={showUsernameHandler}
@@ -193,11 +248,12 @@ const EditProfile = () => {
               onSubmit={usernameSubmitHandler}
               type="text"
               hasError={usernameHasError}
+              customeErrorMsg={userNameErrorMessage}
               isLoading={usernameIsLoading}
             />
             <EditForm
               title="Email"
-              input="JohnathanDoe@gmail.com"
+              input={user.email}
               formIsVisible={showEmailForm}
               hideForm={hideEmailFormHandler}
               showForm={showEmailHandler}
@@ -206,6 +262,7 @@ const EditProfile = () => {
               onSubmit={emailSubmitHandler}
               type="text"
               hasError={emailHasError}
+              customeErrorMsg={emailErrorMessage}
               isLoading={emailIsLoading}
             />
             <EditForm
@@ -219,6 +276,7 @@ const EditProfile = () => {
               onSubmit={passwordSubmitHandler}
               type="password"
               hasError={passwordHasError}
+              customeErrorMsg={passwordErrorMessage}
               isLoading={passwordIsLoading}
             />
           </div>

@@ -1,16 +1,14 @@
 import axios from "axios";
 
+import authHeader from "./auth-header";
 import { LOGOUT } from "../actions/types";
 
 const API_URL = "http://localhost:8762/auth/";
-const FBGOO_REGISTER =
-  "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDgPro4E7mvHr0pvlssXEEmJ8Ca8F_t1W4";
 
-const FBGOO_LOGIN =
-  "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDgPro4E7mvHr0pvlssXEEmJ8Ca8F_t1W4";
-
-const FBGOO_CHANGE_EMAIL =
-  "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDgPro4E7mvHr0pvlssXEEmJ8Ca8F_t1W4";
+const FBGOO_REGISTER = "http://localhost:9000/auth/users";
+const FBGOO_LOGIN = "http://localhost:9000/auth/login";
+const FBGOO_CHANGE_EMAIL = "http://localhost:9000/auth/login";
+const BASE_URL = "http://localhost:9000/auth";
 
 let logoutTimer;
 
@@ -46,24 +44,30 @@ const logout = () => {
   }
 };
 
-const firebaseRegister = (email, password) => {
+// WORKING FUNXTIONS
+const firebaseRegister = (name, username, email, password) => {
   return axios.post(FBGOO_REGISTER, {
+    name,
+    username,
     email,
     password,
     returnSecureToken: true,
   });
 };
 
-const firebaseLogin = (email, password, dispatch) => {
+const firebaseLogin = (username, password, dispatch) => {
   return axios
     .post(FBGOO_LOGIN, {
-      email,
+      username,
       password,
       returnSecureToken: true,
     })
     .then((response) => {
-      if (response.data && response.data.idToken) {
-        localStorage.setItem("token", JSON.stringify(response.data.idToken));
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify(response.data.accessToken)
+        );
       }
 
       if (response.data && response.data.expiresIn) {
@@ -89,56 +93,72 @@ const firebaseLogin = (email, password, dispatch) => {
 };
 
 const firebaseChangeEmail = (email) => {
-  const token = JSON.parse(localStorage.getItem("token"));
   const request_obj = {
-    email,
-    idToken: token,
-    returnSecureToken: true,
+    value: email,
   };
 
   console.log(request_obj);
-  return axios.post(FBGOO_CHANGE_EMAIL, request_obj).then((response) => {
-    return response.data;
-  });
+  return axios
+    .patch(BASE_URL + "/users/update/email", request_obj, {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      return response.data;
+    });
 };
 
 const firebaseChangePassword = (password) => {
-  const token = JSON.parse(localStorage.getItem("token"));
   const request_obj = {
-    password,
-    idToken: token,
-    returnSecureToken: true,
+    value: password,
   };
 
-  return axios.post(FBGOO_CHANGE_EMAIL, request_obj).then((response) => {
-    return response.data;
-  });
+  console.log(request_obj);
+  return axios
+    .patch(BASE_URL + "/users/update/password", request_obj, {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      return response.data;
+    });
 };
 
 const firebaseChangeUsername = (username) => {
-  const token = JSON.parse(localStorage.getItem("token"));
   const request_obj = {
-    username,
-    idToken: token,
-    returnSecureToken: true,
+    value: username,
   };
 
-  return axios.post(FBGOO_CHANGE_EMAIL, request_obj).then((response) => {
-    return response.data;
-  });
+  console.log(request_obj);
+  return axios
+    .patch(BASE_URL + "/users/update/username", request_obj, {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      return response.data;
+    });
 };
 
 const firebaseChangeFullname = (fullname) => {
-  const token = JSON.parse(localStorage.getItem("token"));
   const request_obj = {
-    fullname,
-    idToken: token,
-    returnSecureToken: true,
+    value: fullname,
   };
 
-  return axios.post(FBGOO_CHANGE_EMAIL, request_obj).then((response) => {
-    return response.data;
-  });
+  console.log(request_obj);
+  return axios
+    .patch(BASE_URL + "/users/update/full-name", request_obj, {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const getCurrentUser = () => {
+  return axios
+    .get(BASE_URL + "/users/me", { headers: authHeader() })
+    .then((response) => {
+      console.log(response);
+      return response.data;
+    });
 };
 
 const activateLogoutTimer = (time, dispatch) => {
@@ -178,4 +198,5 @@ export default {
   firebaseChangeFullname,
   calculateRemainingTime,
   activateLogoutTimer,
+  getCurrentUser,
 };

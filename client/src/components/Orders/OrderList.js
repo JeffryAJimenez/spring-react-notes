@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import OrderListItem from "./OrderListItem";
@@ -7,32 +7,39 @@ import { fectOrders } from "../../actions/order";
 
 import RightIcon from "../Profile/RightIcon";
 import LeftIcon from "../Profile/LeftIcon";
-// const order = [{
-//     id: 2342,
-//     date: "06/04/2022",
-//     total: 300.00
-// },
-// {
-//     id: 2342,
-//     date: "06/08/2022",
-//     total: 200.00
-// },
-// {
-//     id: 2343,
-//     date: "07/01/2022",
-//     total: 9.00
-// },
-// {
-//     id: 2344,
-//     date: "08/09/2022",
-//     total: 59.00
-// },]
+import Spinner from "../UI/Spinner";
 
-const OrderList = ({ orders, pageLimit, dataLimit }) => {
+const OrderList = ({}) => {
   console.log("in order");
 
-  const [pages] = useState(Math.ceil(orders.length / dataLimit));
-  const [currentPage, setCurrentPage] = useState(1);
+  const size = 5;
+
+  const [pages, setPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isLast, setIsLast] = useState(false);
+  const [isFirst, setIsFirst] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const dispatch = useDispatch();
+  const orders = useSelector((state) => state.order);
+
+  useEffect(() => {
+    dispatch(fectOrders(currentPage, size))
+      .then((res) => {
+        console.log(res);
+        setPages(res.totalPages);
+        setTotalElements(res.totalElements);
+        setCurrentPage(res.pageable.pageNumber);
+        setIsFirst(res.first);
+        setIsLast(res.last);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+      });
+  }, [dispatch, currentPage]);
 
   const goToNextPage = () => {
     setCurrentPage((page) => page + 1);
@@ -48,16 +55,16 @@ const OrderList = ({ orders, pageLimit, dataLimit }) => {
   };
 
   const getPaginatedData = () => {
-    const startIndex = currentPage * dataLimit - dataLimit;
-    const endIndex = startIndex + dataLimit;
-    return orders.slice(startIndex, endIndex);
+    return orders;
   };
 
   const getPaginatedGroup = () => {
-    let limit = Math.min(pages, pageLimit);
+    let limit = Math.min(5, pages);
 
     let start = Math.floor((currentPage - 1) / limit) * limit;
-    return new Array(limit).fill().map((_, idx) => start + idx + 1);
+    start = Math.max(start, 0);
+
+    return new Array(limit).fill().map((_, idx) => start + idx);
   };
 
   console.log(orders);
@@ -89,12 +96,21 @@ const OrderList = ({ orders, pageLimit, dataLimit }) => {
       <div className={classes.title}>
         <h3>Orders</h3>
       </div>
-      <div>{ordersList}</div>
+      <div>
+        {isLoading && (
+          <div className={classes.spinner}>
+            <div className={classes["spinner-child"]}>
+              <Spinner />
+            </div>
+          </div>
+        )}
+      </div>
+      <div>{!isLoading && ordersList}</div>
       <div className={classes.pagination}>
         <button
           onClick={goToPreviousPage}
           className={`${classes["pagination-item"]} ${
-            currentPage === 1 ? classes.disabled : null
+            isFirst ? classes.disabled : null
           }`}
         >
           <LeftIcon />
@@ -103,7 +119,7 @@ const OrderList = ({ orders, pageLimit, dataLimit }) => {
         <button
           onClick={goToNextPage}
           className={`${classes["pagination-item"]} ${
-            currentPage === pages ? classes.disabled : null
+            isLast ? classes.disabled : null
           }`}
         >
           <RightIcon />

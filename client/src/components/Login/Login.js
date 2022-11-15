@@ -45,12 +45,13 @@ const Login = (props) => {
     dispatch(loginFirebase(username, password))
       .then(() => {
         console.log("Success");
+        setIsLoading(false);
         props.onClose();
       })
       .catch(() => {
+        setIsLoading(false);
         setIsError(true);
-      })
-      .finally(setIsLoading(false));
+      });
   };
 
   const usernameInputClasses = usernameHasError

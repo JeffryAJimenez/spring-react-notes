@@ -18,6 +18,15 @@ public class DataConfig {
           orderRepo.save(new Order("user1", 62.24));
           orderRepo.save(new Order("user1", 768.67));
           orderRepo.save(new Order("user1", 68.68));
+          orderRepo.save(new Order("user1", 62.24));
+          orderRepo.save(new Order("user1", 768.67));
+          orderRepo.save(new Order("user1", 68.68));
+          orderRepo.save(new Order("user1", 62.24));
+          orderRepo.save(new Order("user1", 768.67));
+          orderRepo.save(new Order("user1", 68.68));
+          orderRepo.save(new Order("user1", 62.24));
+          orderRepo.save(new Order("user1", 768.67));
+          orderRepo.save(new Order("user1", 68.68));
 
         };
     }

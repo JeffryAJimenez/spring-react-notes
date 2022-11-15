@@ -12,6 +12,8 @@ import {
   CHANGE_USERNAME_SUCCESS,
   CHANGE_FULLNAME_ERROR,
   CHANGE_FULLNAME_SUCCESS,
+  GET_CURRENT_USER_SUCCESS,
+  GET_CURRENT_USER_ERROR,
 } from "../actions/types";
 
 const token = JSON.parse(localStorage.getItem("token"));
@@ -58,6 +60,8 @@ export default function (state = initialState, action) {
     case CHANGE_USERNAME_SUCCESS:
     case CHANGE_FULLNAME_ERROR:
     case CHANGE_FULLNAME_SUCCESS:
+    case GET_CURRENT_USER_SUCCESS:
+    case GET_CURRENT_USER_ERROR:
       return { ...state };
 
     default:

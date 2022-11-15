@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "http://localhost:8762/orders";
+const BASE_URL = "http://localhost:8764/api/orders";
 
 const orders = [
   {
@@ -26,11 +26,27 @@ const orders = [
   },
 ];
 
-const fectOrders = (username) => {
+const fectOrders = (currentPage, size) => {
   // return axios.get(API_URL + username, {headers: authHeader()});
-  return new Promise((resolve, reject) => {
-    resolve(orders);
-  });
+  return axios
+    .get(BASE_URL, {
+      headers: authHeader(),
+      params: { page: currentPage, size: size },
+    })
+    .then((response) => {
+      return response.data;
+    });
+};
+
+const getOrdersInfo = () => {
+  // return axios.get(API_URL + username, {headers: authHeader()});
+  return axios
+    .get(BASE_URL + "/info", {
+      headers: authHeader(),
+    })
+    .then((response) => {
+      return response.data;
+    });
 };
 
 const postOrder = (order) => {
@@ -41,4 +57,4 @@ const postOrder = (order) => {
   });
 };
 
-export default { fectOrders, postOrder };
+export default { fectOrders, postOrder, getOrdersInfo };

@@ -39,3 +39,15 @@
   justify-content: center;
   margin: 15px 0px 0px 0px;
 }
+
+.spinner {
+  width: 100%;
+  min-height: 200px;
+}
+
+.spinner-child {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -33,6 +33,21 @@ public class OrderService {
         return orderRepo.updateOderCreatorByCreator(oldCreator, newCreator);
     }
 
+
+    //TODO WRITE TESTS AND THROW EXCEPTIONS
+    public double totalSumByUsername(String username){
+
+        return orderRepo.totalSumByUsername(username);
+
+    }
+
+    //TODO WRITE TESTS AND THROW EXCEPTIONS
+    public long countOfOrdersByUsername(String username){
+
+        return orderRepo.countOfOrdersByUsername(username);
+
+    }
+
     public Order createOrder(Order order, String creator) {
 
         double maxTotal = 67000.00;
