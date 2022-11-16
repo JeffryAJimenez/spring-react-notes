@@ -7,7 +7,6 @@ const API_URL = "http://localhost:8762/auth/";
 
 const FBGOO_REGISTER = "http://localhost:9000/auth/users";
 const FBGOO_LOGIN = "http://localhost:9000/auth/login";
-const FBGOO_CHANGE_EMAIL = "http://localhost:9000/auth/login";
 const BASE_URL = "http://localhost:9000/auth";
 
 let logoutTimer;
@@ -97,7 +96,6 @@ const firebaseChangeEmail = (email) => {
     value: email,
   };
 
-  console.log(request_obj);
   return axios
     .patch(BASE_URL + "/users/update/email", request_obj, {
       headers: authHeader(),
@@ -112,7 +110,6 @@ const firebaseChangePassword = (password) => {
     value: password,
   };
 
-  console.log(request_obj);
   return axios
     .patch(BASE_URL + "/users/update/password", request_obj, {
       headers: authHeader(),
@@ -127,7 +124,6 @@ const firebaseChangeUsername = (username) => {
     value: username,
   };
 
-  console.log(request_obj);
   return axios
     .patch(BASE_URL + "/users/update/username", request_obj, {
       headers: authHeader(),
@@ -142,7 +138,6 @@ const firebaseChangeFullname = (fullname) => {
     value: fullname,
   };
 
-  console.log(request_obj);
   return axios
     .patch(BASE_URL + "/users/update/full-name", request_obj, {
       headers: authHeader(),
@@ -156,7 +151,6 @@ const getCurrentUser = () => {
   return axios
     .get(BASE_URL + "/users/me", { headers: authHeader() })
     .then((response) => {
-      console.log(response);
       return response.data;
     });
 };
@@ -165,10 +159,9 @@ const activateLogoutTimer = (time, dispatch) => {
   const remainingTime = calculateRemainingTime(
     new Date().getTime() + time * 1000
   );
-  console.log("inside activateLogoutTimer: " + remainingTime);
+
   if (!logoutTimer) {
     logoutTimer = setTimeout(() => {
-      console.log("calling logout");
       logout();
       dispatch({
         type: LOGOUT,

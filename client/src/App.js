@@ -30,17 +30,13 @@ function App() {
       JSON.parse(localStorage.getItem("expirationTime"))
     );
 
-    console.log("time left");
-    console.log(timeLeft);
     if (timeLeft <= 0) {
       dispatch(logout);
-      console.log("no time");
     } else {
       authService.activateLogoutTimer(
         JSON.parse(localStorage.getItem("expirationTime")),
         dispatch
       );
-      console.log(timeLeft);
     }
   }, [dispatch]);
 
@@ -53,7 +49,6 @@ function App() {
   };
 
   const showProfileHandler = () => {
-    console.log("handler called");
     setProfileIsShow(true);
   };
 

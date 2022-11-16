@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import CloseButton from "../UI/CloseButton";
 
 import classes from "./Register.module.css";
@@ -66,7 +66,6 @@ const Register = (props) => {
   } = useInput(isPasswordValid);
 
   const {
-    value: confirmPassword,
     isValid: confirmPasswordIsValid,
     valueChangeHandler: confirmPasswordChangeHandler,
     inputBlurHandler: confirmPasswordBlurHandler,
@@ -117,8 +116,6 @@ const Register = (props) => {
           props.onLogin();
         },
         (error) => {
-          let errorMessage = "Authentication failed!";
-          console.log(error);
           if (error && error.response && error.response.data) {
             if (error.response.data === "EMAIL-EXISTS") {
               setEmailIsTaken(true);

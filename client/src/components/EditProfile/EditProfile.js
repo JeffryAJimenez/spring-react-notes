@@ -38,7 +38,13 @@ const EditProfile = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchUserDetails();
+    dispatch(getCurrentUser()).then((res) => {
+      setUser({
+        username: res.username,
+        email: res.email,
+        fullName: res.fullName,
+      });
+    });
   }, [dispatch]);
 
   const {
@@ -115,13 +121,11 @@ const EditProfile = () => {
 
     dispatch(changeEmailFirebase(email))
       .then((response) => {
-        console.log("success");
         hideEmailFormHandler();
         fetchUserDetails();
         setEmailIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setEmailHasError(true);
 
         if (error && error.response && error.response.data) {
@@ -141,13 +145,11 @@ const EditProfile = () => {
     //MAKE THE CHAMEPasswordAction
     dispatch(changePasswordFirebase(password))
       .then((response) => {
-        console.log("success");
         hidePasswordFormHandler();
         fetchUserDetails();
         setPasswordIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setPasswordHasError(true);
 
         if (error && error.response && error.response.data) {
@@ -168,13 +170,11 @@ const EditProfile = () => {
     //MAKE THE CHAME username dAction
     dispatch()
       .then((response) => {
-        console.log("success");
         hideUsernameFormHandler();
         fetchUserDetails();
         setUsernameIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setUsernameHasError(true);
 
         if (error && error.response && error.response.data) {
@@ -193,13 +193,11 @@ const EditProfile = () => {
     //MAKE THE CHAME username dAction
     dispatch(changeFullnameFirebase(`${firstName} ${lastName}`))
       .then((response) => {
-        console.log("success");
         hideNameFormHandler();
         fetchUserDetails();
         setNameIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setNameHasError(true);
         setNameIsLoading(false);
       });

@@ -29,11 +29,13 @@ const Profile = (props) => {
 
   useEffect(() => {
     dispatch(getCurrentUser()).then((res) => {
-      console.log(res);
       setUser({ username: res.username });
     });
 
-    getInfo();
+    dispatch(getOrdersInfo()).then((res) => {
+      setTotal(res.total);
+      setOrdersCount(res.numOfOrders);
+    });
   }, [dispatch]);
 
   const getInfo = () => {
@@ -44,7 +46,6 @@ const Profile = (props) => {
   };
 
   const logoutHandler = () => {
-    console.log("signing out bye!");
     dispatch(logout());
     props.onClose();
   };
@@ -57,13 +58,6 @@ const Profile = (props) => {
     props.onClose();
   }
 
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-
-  const totalUSD = formatter.format(total);
-
   return (
     <Modal onClose={props.onClose}>
       {/* <div class="container mt-5 d-flex justify-content-center"> */}
@@ -74,6 +68,7 @@ const Profile = (props) => {
             src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
             className="rounded"
             width="155"
+            alt="avatar"
           />
         </div>
 

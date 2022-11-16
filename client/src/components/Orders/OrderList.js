@@ -3,16 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import OrderListItem from "./OrderListItem";
 import classes from "./OrderList.module.css";
-import { deleteOrder, fectOrders } from "../../actions/order";
+import { fectOrders } from "../../actions/order";
 
 import RightIcon from "../Profile/RightIcon";
 import LeftIcon from "../Profile/LeftIcon";
 import Spinner from "../UI/Spinner";
-import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 
 const OrderList = ({ onGetInfo }) => {
-  console.log("in order");
-
   const size = 5;
 
   const [pages, setPages] = useState(0);
@@ -27,13 +24,23 @@ const OrderList = ({ onGetInfo }) => {
   const orders = useSelector((state) => state.order);
 
   useEffect(() => {
-    getOrders();
+    dispatch(fectOrders(currentPage, size))
+      .then((res) => {
+        setPages(res.totalPages);
+        setTotalElements(res.totalElements);
+        setCurrentPage(res.pageable.pageNumber);
+        setIsFirst(res.first);
+        setIsLast(res.last);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+      });
   }, [dispatch, currentPage]);
 
   const getOrders = () => {
     dispatch(fectOrders(currentPage, size))
       .then((res) => {
-        console.log(res);
         setPages(res.totalPages);
         setTotalElements(res.totalElements);
         setCurrentPage(res.pageable.pageNumber);
@@ -72,7 +79,6 @@ const OrderList = ({ onGetInfo }) => {
     return new Array(limit).fill().map((_, idx) => start + idx);
   };
 
-  console.log(orders);
   const ordersList =
     totalElements === 0 ? (
       <div className={classes.message}>

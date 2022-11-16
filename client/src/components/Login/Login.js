@@ -9,7 +9,6 @@ import CloseButton from "../UI/CloseButton";
 
 import { loginFirebase } from "../../actions/auth";
 import useInput from "../../hooks/useInput";
-import authService from "../../services/auth.service";
 import Spinner from "../UI/Spinner";
 
 const Login = (props) => {
@@ -44,7 +43,6 @@ const Login = (props) => {
 
     dispatch(loginFirebase(username, password))
       .then(() => {
-        console.log("Success");
         setIsLoading(false);
         props.onClose();
       })
