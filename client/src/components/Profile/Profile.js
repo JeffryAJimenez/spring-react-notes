@@ -1,10 +1,12 @@
+import { useDispatch, useSelector } from "react-redux";
+import AnimatedNumbers from "react-animated-numbers";
+
 import Modal from "../UI/Modal";
 import EditIcon from "./EditIcon";
 import Button from "../UI/Button";
 import LogoutIcon from "./LogoutIcon";
 import classes from "./Profile.module.css";
 import OrderList from "../Orders/OrderList";
-import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "../../actions/auth";
 import { useEffect, useState } from "react";
@@ -31,11 +33,15 @@ const Profile = (props) => {
       setUser({ username: res.username });
     });
 
+    getInfo();
+  }, [dispatch]);
+
+  const getInfo = () => {
     dispatch(getOrdersInfo()).then((res) => {
       setTotal(res.total);
       setOrdersCount(res.numOfOrders);
     });
-  }, [dispatch]);
+  };
 
   const logoutHandler = () => {
     console.log("signing out bye!");
@@ -77,12 +83,34 @@ const Profile = (props) => {
           <div className={classes.stats}>
             <div className={classes["stats-item"]}>
               <span className={classes["stats-item-title"]}>Orders</span>
-              <span>{ordersCount}</span>
+              {/* <span>{ordersCount}</span> */}
+              <AnimatedNumbers
+                includeComma
+                animateToNumber={ordersCount}
+                configs={[
+                  { mass: 1, tension: 130, friction: 40 },
+                  { mass: 2, tension: 140, friction: 40 },
+                  { mass: 3, tension: 130, friction: 40 },
+                ]}
+              ></AnimatedNumbers>
             </div>
 
             <div className={classes["stats-item"]}>
               <span className={classes["stats-item-title"]}>Total</span>
-              <span>{totalUSD}</span>
+              {/* <span>{totalUSD}</span> */}
+
+              <div className="d-flex">
+                <span>$</span>
+                <AnimatedNumbers
+                  includeComma
+                  animateToNumber={total}
+                  configs={[
+                    { mass: 1, tension: 130, friction: 40 },
+                    { mass: 2, tension: 140, friction: 40 },
+                    { mass: 3, tension: 130, friction: 40 },
+                  ]}
+                ></AnimatedNumbers>
+              </div>
             </div>
           </div>
 
@@ -100,7 +128,7 @@ const Profile = (props) => {
         </div>
       </div>
 
-      <OrderList />
+      <OrderList onGetInfo={getInfo} />
 
       <div className={classes.actions}>
         <button className={classes["button--alt"]} onClick={props.onClose}>

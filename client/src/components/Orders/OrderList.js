@@ -3,19 +3,20 @@ import { useDispatch, useSelector } from "react-redux";
 
 import OrderListItem from "./OrderListItem";
 import classes from "./OrderList.module.css";
-import { fectOrders } from "../../actions/order";
+import { deleteOrder, fectOrders } from "../../actions/order";
 
 import RightIcon from "../Profile/RightIcon";
 import LeftIcon from "../Profile/LeftIcon";
 import Spinner from "../UI/Spinner";
+import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 
-const OrderList = ({}) => {
+const OrderList = ({ onGetInfo }) => {
   console.log("in order");
 
   const size = 5;
 
   const [pages, setPages] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
+  const [totalElements, setTotalElements] = useState(0); ///set message that there are no orders
   const [currentPage, setCurrentPage] = useState(0);
   const [isLast, setIsLast] = useState(false);
   const [isFirst, setIsFirst] = useState(false);
@@ -26,6 +27,10 @@ const OrderList = ({}) => {
   const orders = useSelector((state) => state.order);
 
   useEffect(() => {
+    getOrders();
+  }, [dispatch, currentPage]);
+
+  const getOrders = () => {
     dispatch(fectOrders(currentPage, size))
       .then((res) => {
         console.log(res);
@@ -39,7 +44,7 @@ const OrderList = ({}) => {
       .catch((error) => {
         setIsLoading(false);
       });
-  }, [dispatch, currentPage]);
+  };
 
   const goToNextPage = () => {
     setCurrentPage((page) => page + 1);
@@ -68,14 +73,23 @@ const OrderList = ({}) => {
   };
 
   console.log(orders);
-  const ordersList = getPaginatedData().map((item) => (
-    <OrderListItem
-      key={item.id}
-      id={item.id}
-      date={item.date}
-      total={item.total}
-    />
-  ));
+  const ordersList =
+    totalElements === 0 ? (
+      <div className={classes.message}>
+        <span>No orders available.</span>
+      </div>
+    ) : (
+      getPaginatedData().map((item) => (
+        <OrderListItem
+          key={item.id}
+          id={item.id}
+          date={item.date}
+          total={item.total}
+          getOrders={getOrders}
+          onGetInfo={onGetInfo}
+        />
+      ))
+    );
 
   const paginationGroup = getPaginatedGroup().map((item, index) => (
     <button

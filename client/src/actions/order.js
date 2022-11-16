@@ -4,6 +4,8 @@ import {
   POSTED_ORDER_SUCCESS,
   ORDERS_INFO_SUCCESS,
   ORDERS_INFO_FAILED,
+  ORDER_DELETE_SUCCESS,
+  ORDER_DELETE_FAILED,
 } from "./types";
 
 import OrdersService from "../services/orders.service";
@@ -87,6 +89,33 @@ export const postOrder = (order) => (dispatch) => {
       });
 
       return Promise.reject();
+    }
+  );
+};
+
+export const deleteOrder = (id) => (dispatch) => {
+  return OrdersService.deleteOrder(id).then(
+    (response) => {
+      dispatch({
+        type: ORDER_DELETE_SUCCESS,
+      });
+
+      return Promise.resolve(response);
+    },
+
+    (error) => {
+      // const message =
+      //     (error.response &&
+      //         error.response.data &&
+      //         error.response.data.message) ||
+      //         error.message ||
+      //         error.toString();
+
+      dispatch({
+        type: ORDER_DELETE_FAILED,
+      });
+
+      return Promise.reject(error);
     }
   );
 };

@@ -40,6 +40,15 @@
   margin: 15px 0px 0px 0px;
 }
 
+.message {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0px 30px 0px;
+  color: var(--bs-gray-500);
+  font-weight: bold;
+  font-size: 25px;
+}
+
 .spinner {
   width: 100%;
   min-height: 200px;

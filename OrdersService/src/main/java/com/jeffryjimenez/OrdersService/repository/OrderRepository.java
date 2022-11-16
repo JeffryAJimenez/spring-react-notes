@@ -21,6 +21,6 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     @Query("SELECT COUNT(o) FROM Order o WHERE o.creator = :creator")
     public long countOfOrdersByUsername(@Param(value = "creator") String creator);
 
-    @Query("SELECT SUM(o.total) FROM Order o WHERE o.creator = :creator")
+    @Query("SELECT COALESCE( SUM(o.total), 0.0 )FROM Order o WHERE o.creator = :creator")
     public double totalSumByUsername(@Param(value = "creator") String creator);
 }

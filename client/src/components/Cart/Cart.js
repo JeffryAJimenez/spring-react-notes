@@ -70,12 +70,13 @@ const Cart = (props) => {
     )
       .then((res) => {
         dispatch(clearCart());
+        setIsLoading(false);
         props.onClose();
       })
       .catch((err) => {
         setIsError(true);
-      })
-      .finally(setIsLoading(false));
+        setIsLoading(false);
+      });
   };
 
   const totalAmount = `$${cart.totalAmount.toFixed(2)}`;

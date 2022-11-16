@@ -4,6 +4,8 @@ import {
   POSTED_ORDER_SUCCESS,
   ORDERS_INFO_SUCCESS,
   ORDERS_INFO_FAILED,
+  ORDER_DELETE_FAILED,
+  ORDER_DELETE_SUCCESS,
 } from "../actions/types";
 
 const initialState = [];
@@ -19,6 +21,8 @@ export default function (state = initialState, action) {
     case ORDERS_FAIL:
     case ORDERS_INFO_SUCCESS:
     case ORDERS_INFO_FAILED:
+    case ORDER_DELETE_SUCCESS:
+    case ORDER_DELETE_FAILED:
       return state;
 
     default:
