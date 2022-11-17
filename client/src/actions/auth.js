@@ -168,8 +168,8 @@ export const changePasswordFirebase = (password) => (dispatch) => {
   );
 };
 
-export const changeUsernameFirebase = (username) => (dispatch) => {
-  return AuthService.firebaseChangeUsername(username).then(
+export const changeUsernameFirebase = (username, password) => (dispatch) => {
+  return AuthService.firebaseChangeUsername(username, password, dispatch).then(
     (response) => {
       dispatch({
         type: CHANGE_USERNAME_SUCCESS,

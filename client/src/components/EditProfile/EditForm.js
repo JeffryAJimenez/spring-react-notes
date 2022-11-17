@@ -7,16 +7,19 @@ import classes from "./EditForm.module.css";
 
 const EditForm = ({
   title,
+  title2,
   input,
   showForm,
   hideForm,
   formIsVisible,
   validate,
   validateEqual,
-  type,
+  type1,
+  type2,
   onSubmit,
   hasError,
   isLoading,
+  input2InvalidMsg,
   customeErrorMsg,
 }) => {
   const {
@@ -32,6 +35,7 @@ const EditForm = ({
   const {
     value: confirmValue,
     isValid: confirmValueIsValid,
+    hasError: confirmValueHasError,
     valueChangeHandler: confirmValueChangeHandler,
     inputBlurHandler: confirmValueBlurHandler,
     cancelBlurHandler: confirmValueCancelBlurHandler,
@@ -47,7 +51,7 @@ const EditForm = ({
       return;
     }
 
-    onSubmit(value);
+    onSubmit(value, confirmValue);
   };
 
   const cancelHandler = () => {
@@ -66,7 +70,7 @@ const EditForm = ({
     ? `form-control mb-3 is-invalid`
     : `form-control mb-3`;
 
-  const inputConfirmClasses = !confirmValueIsValid
+  const inputConfirmClasses = confirmValueHasError
     ? ` form-control mb-3 is-invalid`
     : ` form-control mb-3`;
 
@@ -86,7 +90,7 @@ const EditForm = ({
       <form onSubmit={submitHandler} className={classes.form}>
         <div className="form-group">
           <input
-            type={type}
+            type={type1}
             className={inputClasses}
             id="valueInput"
             placeholder={title}
@@ -103,19 +107,17 @@ const EditForm = ({
 
         <div className="form-group mb-3">
           <input
-            type={type}
+            type={type2}
             className={inputConfirmClasses}
             id="confirmValue"
-            placeholder={`Confirm ${title}`}
+            placeholder={title2}
             onChange={confirmValueChangeHandler}
             onBlur={confirmValueBlurHandler}
           />
         </div>
 
-        {!confirmValueIsValid && (
-          <div
-            className={classes.warning}
-          >{`Confirm ${title.toLowerCase()} should be equal to ${title.toLowerCase()}`}</div>
+        {confirmValueHasError && (
+          <div className={classes.warning}>{input2InvalidMsg}</div>
         )}
 
         <div className={classes.actions}>

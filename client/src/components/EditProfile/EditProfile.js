@@ -4,7 +4,9 @@ import {
   changeEmailFirebase,
   changeFullnameFirebase,
   changePasswordFirebase,
+  changeUsernameFirebase,
   getCurrentUser,
+  logout,
 } from "../../actions/auth";
 
 import useValidation from "../../hooks/useValidation";
@@ -162,13 +164,13 @@ const EditProfile = () => {
       });
   };
 
-  const usernameSubmitHandler = (username) => {
+  const usernameSubmitHandler = (username, password) => {
     setUsernameHasError(false);
     setUsernameIsLoading(true);
     setUsernameErrorMessage("");
 
     //MAKE THE CHAME username dAction
-    dispatch()
+    dispatch(changeUsernameFirebase(username, password))
       .then((response) => {
         hideUsernameFormHandler();
         fetchUserDetails();
@@ -182,6 +184,11 @@ const EditProfile = () => {
             setUsernameErrorMessage("Username is already taken.");
           }
         }
+
+        if (error.response.status === 401) {
+          dispatch(logout());
+        }
+
         setUsernameIsLoading(false);
       });
   };
@@ -237,20 +244,24 @@ const EditProfile = () => {
             />
             <EditForm
               title="Username"
+              title2="Password"
               input={user.username}
               formIsVisible={showUsernameForm}
               hideForm={hideUsernameFormHandler}
               showForm={showUsernameHandler}
               validate={isUsernameValid}
-              validateEqual={isEqual}
+              validateEqual={isPasswordValid}
               onSubmit={usernameSubmitHandler}
-              type="text"
+              type1="text"
+              type2="password"
               hasError={usernameHasError}
               customeErrorMsg={userNameErrorMessage}
+              input2InvalidMsg={"Enter a valid password"}
               isLoading={usernameIsLoading}
             />
             <EditForm
               title="Email"
+              title2="Confirm email"
               input={user.email}
               formIsVisible={showEmailForm}
               hideForm={hideEmailFormHandler}
@@ -258,13 +269,16 @@ const EditProfile = () => {
               validate={isEmailValid}
               validateEqual={isEqual}
               onSubmit={emailSubmitHandler}
-              type="text"
+              type1="text"
+              type2="text"
               hasError={emailHasError}
               customeErrorMsg={emailErrorMessage}
+              input2InvalidMsg={`Confirm email should be equal to email`}
               isLoading={emailIsLoading}
             />
             <EditForm
               title="Password"
+              title2="Confirm password"
               input="*********"
               formIsVisible={showPasswordForm}
               hideForm={hidePasswordFormHandler}
@@ -272,9 +286,11 @@ const EditProfile = () => {
               validate={isPasswordValid}
               validateEqual={isEqual}
               onSubmit={passwordSubmitHandler}
-              type="password"
+              type1="password"
+              type2="password"
               hasError={passwordHasError}
               customeErrorMsg={passwordErrorMessage}
+              input2InvalidMsg={`Confirm password should be equal to password`}
               isLoading={passwordIsLoading}
             />
           </div>

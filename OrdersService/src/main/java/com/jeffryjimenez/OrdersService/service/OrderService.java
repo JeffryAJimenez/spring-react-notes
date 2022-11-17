@@ -30,7 +30,7 @@ public class OrderService {
     }
 
     public int updateCreator( String oldCreator, String newCreator){
-        return orderRepo.updateOderCreatorByCreator(oldCreator, newCreator);
+        return orderRepo.updateOrderCreatorByCreator(oldCreator, newCreator);
     }
 
 

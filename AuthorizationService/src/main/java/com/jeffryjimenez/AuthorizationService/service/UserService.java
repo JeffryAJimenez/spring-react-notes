@@ -12,6 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +32,20 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
     private KafkaUserMessagingService kafkaUserMessagingService;
+    private AuthenticationManager authenticationManager;
+    private JwtTokenProvider tokenProvider;
 
-    public UserService(@Lazy UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder, @Lazy KafkaUserMessagingService kafkaUserMessagingService){
+    public UserService(@Lazy UserRepository userRepository,
+                       @Lazy PasswordEncoder passwordEncoder,
+                       @Lazy KafkaUserMessagingService kafkaUserMessagingService,
+                       @Lazy AuthenticationManager authenticationManager,
+                       @Lazy JwtTokenProvider jwtTokenProvider){
+
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.kafkaUserMessagingService = kafkaUserMessagingService;
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = jwtTokenProvider;
     }
 
     public List<Users> findAll(){
@@ -157,36 +170,48 @@ public class UserService {
 
     }
 
-//    public Users updateUserUsername(String username, String newUsername){
-//
-//        if(!EmailValidator.getInstance().isValid(email)) {
-//
-//            log.warn("email does not have a valid format");
-//
-//            throw new BadFormatException("Email");
-//        }
-//
-//        if (userRepository.existsByEmail(email)){
-//
-//            log.warn("email {} already exists", email);
-//            throw new EmailAlreadyExistsException(String.format("email %s already exists", email));
-//        }
-//
-//        Optional<Users> userOpt = userRepository.findByUsername(username);
-//
-//        if(userOpt.isEmpty()){
-//
-//            log.warn("username {} does not exists", username);
-//            throw new ResourceNotFoundException(username);
-//
-//        }
-//
-//        Users user = userOpt.get();
-//        user.setEmail(email);
-//
-//        return userRepository.save(user);
-//
-//    }
+    public String updateUserUsername(String username, String newUsername, String password){
+
+        //MAKE SURE THE USER KNOWS HIS PASSWORD
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+        Optional<Users> userOpt = userRepository.findByUsername(username);
+
+        if(userOpt.isEmpty()){
+
+            log.warn("username {} does not exists", username);
+            throw new ResourceNotFoundException(username);
+
+        }
+
+        if(userRepository.existsByUsername(newUsername)){
+            log.warn("username {} already exists", newUsername);
+
+            throw new UsernameAlreadyExistsException(String.format("username %s already exists", newUsername));
+        }
+
+
+        Users user = userOpt.get();
+        user.setUsername(newUsername);
+
+        userRepository.save(user);
+
+        kafkaUserMessagingService.sendUsernameChanged(username, newUsername);
+
+        return generateToken(user.getUsername(), password);
+
+    }
+
+    private String generateToken(String username, String password){
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+
+        return jwt;
+
+    }
 
     private boolean passwordIsValid(String password){
         String regex = "^(?=.*[0-9])"

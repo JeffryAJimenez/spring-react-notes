@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface OrderRepository extends CrudRepository<Order, Long> {
@@ -15,8 +16,9 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     Page<Order> findAllByCreator(String creator, Pageable pageable);
 
     @Modifying
+    @Transactional
     @Query("UPDATE Order o SET o.creator = :newCreator WHERE o.creator = :oldCreator ")
-    int updateOderCreatorByCreator(@Param(value = "oldCreator") String oldCreator, @Param(value = "newCreator") String newCreator);
+    int updateOrderCreatorByCreator(@Param(value = "oldCreator") String oldCreator, @Param(value = "newCreator") String newCreator);
 
     @Query("SELECT COUNT(o) FROM Order o WHERE o.creator = :creator")
     public long countOfOrdersByUsername(@Param(value = "creator") String creator);

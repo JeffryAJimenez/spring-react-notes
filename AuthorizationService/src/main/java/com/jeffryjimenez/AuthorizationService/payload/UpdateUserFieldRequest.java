@@ -12,4 +12,6 @@ public class UpdateUserFieldRequest {
     @NotNull
     private String value;
 
+    private String password;
+
 }

@@ -119,9 +119,10 @@ const firebaseChangePassword = (password) => {
     });
 };
 
-const firebaseChangeUsername = (username) => {
+const firebaseChangeUsername = (username, password, dispatch) => {
   const request_obj = {
     value: username,
+    password: password,
   };
 
   return axios
@@ -129,6 +130,33 @@ const firebaseChangeUsername = (username) => {
       headers: authHeader(),
     })
     .then((response) => {
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem(
+          "token",
+          JSON.stringify(response.data.accessToken)
+        );
+      }
+
+      if (response.data && response.data.expiresIn) {
+        localStorage.setItem(
+          "expirationTime",
+          JSON.stringify(response.data.expiresIn)
+        );
+
+        const remainingTime = calculateRemainingTime(
+          new Date().getTime() + +response.data.expiresIn * 1000
+        );
+
+        if (!logoutTimer) {
+          logoutTimer = setTimeout(() => {
+            logout();
+            dispatch({
+              type: LOGOUT,
+            });
+          }, remainingTime);
+        }
+      }
+
       return response.data;
     });
 };

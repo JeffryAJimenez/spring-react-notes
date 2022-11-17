@@ -25,6 +25,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -151,6 +152,7 @@ public class UserController {
     @PatchMapping(value = ("/users/update/full-name"), produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUserFullName(@RequestBody UpdateUserFieldRequest userFieldRequest, Principal principal){
 
+
         Users updateUser = userService.updateUserFullName(principal.getName(), userFieldRequest.getValue());
 
         UserSummary summary = convertTo(updateUser);
@@ -166,6 +168,15 @@ public class UserController {
         UserSummary summary = convertTo(updateUser);
 
         return ResponseEntity.ok(summary);
+    }
+
+    @PatchMapping(value = ("/users/update/username"), produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateUserUsername(@RequestBody UpdateUserFieldRequest userFieldRequest, Principal principal){
+
+        String token = userService.updateUserUsername(principal.getName(), userFieldRequest.getValue(), userFieldRequest.getPassword());
+
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+
     }
 
     private UserSummary convertTo(Users user){
