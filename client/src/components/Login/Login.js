@@ -134,11 +134,11 @@ const Login = (props) => {
       </div>
       <div className={classes.divider}></div>
       <div className={classes.body}>
-        <h2 className={classes["sign-in"]}>New to ReactMeals?</h2>
+        <h2 className={classes["sign-in"]}>New to Meals?</h2>
         <ButtonInverted name="Create Account" onClick={props.onRegister} />
       </div>
       <div className={classes.footer}>
-        <span>Thank you showing interest!</span>
+        <span>Thank you for showing interest!</span>
       </div>
     </Modal>
   );

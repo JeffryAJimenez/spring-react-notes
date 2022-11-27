@@ -20,7 +20,7 @@ const Header = (props) => {
     <Fragment>
       <header className={classes.header}>
         <Link to="/">
-          <h1 className={classes.logo}>ReactMeals</h1>
+          <h1 className={classes.logo}>Meals</h1>
         </Link>
 
         <div className={classes.nav}>

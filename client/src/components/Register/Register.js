@@ -302,7 +302,7 @@ const Register = (props) => {
         <ButtonInverted name="Login" onClick={props.onLogin} />
       </div>
       <div className={classes.footer}>
-        <span>Thank you showing interest!</span>
+        <span>Thank you for showing interest!</span>
       </div>
     </Modal>
   );
